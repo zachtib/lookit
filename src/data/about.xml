@@ -9,7 +9,7 @@
     <property name="program_name">Lookit</property>
     <property name="version">0.0.0</property>
     <property name="copyright" translatable="yes">Copyright (c) 2010 Zach Tibbitts</property>
-    <property name="website">http://blog.zachtib.com</property>
+    <property name="website">http://zachtib.github.com/lookit</property>
     <property name="authors">Zach Tibbitts</property>
     <property name="logo_icon_name">lookit</property>
     <signal name="response" handler="on_about_dialog_response"/>
