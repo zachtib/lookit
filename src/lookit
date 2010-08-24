@@ -1,0 +1,232 @@
+#!/usr/bin/python
+
+# Copyright (c) 2010 by Zach Tibbitts
+#
+# GNU General Public Licence (GPL)
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import appindicator
+import gobject
+import gtk
+import hashlib
+import os
+import pickle
+import pynotify
+import sys
+import time
+import urllib
+import urlparse
+
+try:
+	# Try to import these from current directory, in case running from src
+	import aboutdlg
+	import prefdlg
+	import screencapper
+	import uploader
+	import common
+except ImportError:
+	# Then fall back to globally installed versions
+	from lookit import aboutdlg
+	from lookit import prefdlg
+	from lookit import screencapper
+	from lookit import uploader
+	from lookit import common
+
+CONF_FILE = os.path.expanduser('~/.config/lookit.conf')
+TRASH_DIR = os.path.expanduser('~/.local/share/Trash/files')
+
+class LookitApp:
+
+	def __init__(self):
+		# Try and load preferences from configuration file
+		try:
+			f = open(CONF_FILE, 'rb')
+			self.prefs = pickle.load(f)
+			f.close()
+		except:
+			print "Unable to load prefs"
+			if 'Imgur' in uploader.PROTO_LIST:
+				self.prefs = dict(proto='Imgur')
+			else:
+				self.prefs = dict()
+		self.prefs['version'] = common.VERSION
+		f = open(CONF_FILE, 'wb')
+		pickle.dump(self.prefs, f)
+		f.close()
+
+		self.indicator = appindicator.Indicator(
+			"lookit-indicator",
+			"lookit",
+			appindicator.CATEGORY_APPLICATION_STATUS)
+		self.indicator.set_status(appindicator.STATUS_ACTIVE)
+
+		# Check for special Ubuntu themes.
+		# This is an ugly, ugly hack
+		theme = gtk.gdk.screen_get_default().get_setting(
+						'gtk-icon-theme-name')
+		if theme == 'ubuntu-mono-dark':
+			self.indicator.set_icon('lookit-dark')
+		elif theme == 'ubuntu-mono-light':
+			self.indicator.set_icon('lookit-light')
+		# Oh god, it hurt to even type that, I need to find
+		# a better solution, but it won't see the icons if I
+		# install them manually whhhaaarrgggbbbbllll
+		
+		menu = gtk.Menu()
+		
+		item = gtk.MenuItem("Capture Area")
+		item.connect("activate", self.capture_area)
+		item.show()
+		menu.append(item)
+	
+		item = gtk.MenuItem("Capture Entire Screen")
+		item.connect("activate", self.capture_screen)
+		item.show()
+		menu.append(item)
+	
+		item = gtk.SeparatorMenuItem()
+		item.show()
+		menu.append(item)
+	
+		item = gtk.MenuItem("Preferences")
+		item.connect("activate", self.show_pref_dlg)
+		item.show()
+		menu.append(item)
+	
+		item = gtk.MenuItem("About")
+		item.connect("activate", self.show_about_dlg)
+		item.show()
+		menu.append(item)
+	
+		item = gtk.SeparatorMenuItem()
+		item.show()
+		menu.append(item)
+		
+		item = gtk.MenuItem("Exit")
+		item.connect("activate", self.exit)
+		item.show()
+		menu.append(item)
+	
+		self.indicator.set_menu(menu)
+
+	def run(self):
+		gtk.main()
+
+	def show_error(self, message):
+		self.show_notification("Error", message)
+
+	def capture_area(self, widget, data=None):
+		if not 'proto' in self.prefs.keys():
+			self.show_error('Please set up your preferences first')
+			return
+		s = screencapper.ScreenCapper()
+		pb = s.capture_area()
+		self.process_pixbuf(pb)
+	
+	def capture_screen(self, widget, data=None):
+		if not 'proto' in self.prefs.keys():
+			self.show_error('Please set up your preferences first')
+			return
+		time.sleep(1) # Give the menu time to disappear
+		s = screencapper.ScreenCapper()
+		pb = s.capture_screen()
+		self.process_pixbuf(pb)
+
+	def process_pixbuf(self, pb):
+		if pb != None:
+			m = hashlib.md5()
+			m.update(pb.get_pixels())
+			hashstring = m.hexdigest() + '.png'
+			pb.save(hashstring, 'png')
+			self.upload_image(hashstring)
+		else:
+			self.show_error('Unable to get screenshot')
+
+	def upload_image(self, image):
+		proto = self.prefs['proto']
+		if proto == 'SSH':
+			success, data = uploader.upload_file_sftp(image,
+					self.prefs['hostname'],
+					self.prefs['port'],
+					self.prefs['username'],
+					self.prefs['password'],
+					self.prefs['directory'],
+					self.prefs['url'],
+					)
+		elif proto == 'FTP':
+			success, data = uploader.upload_file_ftp(image,
+					self.prefs['hostname'],
+					self.prefs['port'],
+					self.prefs['username'],
+					self.prefs['password'],
+					self.prefs['directory'],
+					self.prefs['url'],
+					)
+		elif proto == 'Imgur':
+			success, data = uploader.upload_file_imgur(image)
+		elif proto == 'None':
+			success = True
+		else:
+			success = False
+			data = "Error: no such protocol: {0}".format(proto)
+		if not success:
+			self.show_error(data)
+			return
+		if data:
+			url = data['original_image']
+		else:
+			url = urlparse.urljoin(self.prefs['url'], image)
+		if self.prefs['shortenurl'] and proto != 'None':
+			url = urllib.urlopen(
+				'http://is.gd/api.php?longurl={0}'
+				.format(url)).readline()
+			print "URL Shortened:", url
+		if self.prefs['trash']:
+			os.remove(os.path.abspath(image))
+		else:
+			# newimage = 
+			os.rename(os.abspath(image), 
+			          os.path.join(self.prefs['savedir'], image))
+			
+		clip = gtk.Clipboard()
+		clip.set_text(url)
+		if proto == 'None':
+			self.show_notification('Image Saved', image)
+		else:
+			self.show_notification('Upload Complete', url)
+
+	def show_notification(self, msg_title, msg_body):
+		pynotify.Notification(msg_title, msg_body).show()
+	
+	def show_pref_dlg(self, widget, data=None):
+		p = prefdlg.PrefDlg()
+		p.run(self.prefs)
+		result = p.get_result()
+		self.prefs.update(result)
+		f = open(CONF_FILE, 'wb')
+		pickle.dump(self.prefs, f)
+		f.close()
+			
+	
+	def show_about_dlg(self, widget, data=None):
+		aboutdlg.AboutDlg().run()
+	
+	def exit(self, widget, data=None):
+		gtk.main_quit()
+		sys.exit(0)
+	
+if __name__=="__main__":
+	app = LookitApp()
+	app.run()
+

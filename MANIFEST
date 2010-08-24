@@ -1,0 +1,14 @@
+lookit-dark.svg
+lookit-light.svg
+lookit.desktop
+lookit.svg
+setup.py
+src/__init__.py
+src/aboutdlg.py
+src/common.py
+src/lookit
+src/prefdlg.py
+src/screencapper.py
+src/uploader.py
+src/data/about.xml
+src/data/pref.xml
