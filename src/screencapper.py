@@ -129,12 +129,13 @@ class ScreenCapper:
                                          width, height)
 
         def capture_screen(self):
+		self.size = self.root.get_geometry()
                 self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False,
-                                             8, self.size[0], self.size[1])
+                                             8, self.size[2], self.size[3])
                 self.pixbuf.get_from_drawable(self.root,
                                               self.root.get_colormap(),
-                                              0, 0, 0, 0, self.size[0],
-                                              self.size[1])
+                                              0, 0, 0, 0, self.size[2],
+                                              self.size[3])
                 return self.pixbuf
 
         def capture_area(self):
