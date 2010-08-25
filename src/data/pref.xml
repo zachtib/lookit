@@ -6,9 +6,10 @@
     <property name="width_request">400</property>
     <property name="height_request">360</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">ScreenShare Preferences</property>
+    <property name="title" translatable="yes">Lookit Preferences</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
+    <property name="skip_taskbar_hint">True</property>
     <property name="has_separator">False</property>
     <signal name="destroy" handler="on_pref_dialog_destroy"/>
     <signal name="close" handler="on_pref_dialog_close"/>
