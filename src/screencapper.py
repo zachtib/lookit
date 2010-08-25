@@ -23,21 +23,6 @@ class ScreenCapper:
                         graphics_exposures = True,
                             subwindow_mode = gtk.gdk.INCLUDE_INFERIORS
                 )
-                '''
-                self.gc = self.xroot.create_gc(
-                        line_width = 1,
-                        line_style = X.LineSolid,
-                        fill_style = X.FillSolid,
-                        fill_rule = X.WindingRule,
-                        cap_style = X.CapButt,
-                        join_style = X.JoinMiter,
-                        foreground = self.xcolor,
-                        background = self.display.screen().black_pixel,
-                        function = X.GXxor,
-                        graphics_exposures = False,
-                        subwindow_mode = X.IncludeInferiors,
-                        )
-                '''
 
                 self.down = False
                 self.x = None
@@ -56,13 +41,15 @@ class ScreenCapper:
                         self.button_release_event(None, event)
                 elif event.type == gtk.gdk.MOTION_NOTIFY:
                         self.motion_notify_event(None, event)
-                else:
-                        print event
+                elif event.type == gtk.gdk.KEY_PRESS:
+			print event
+			self.key_press_event(event)
+		else:
+			print event
 
 
         def key_press_event(self, event):
                 self.down = False
-                gtk.gdk.pointer_ungrab()
                 gtk.main_quit()
         
         def button_press_event(self, widget, event):
@@ -73,12 +60,8 @@ class ScreenCapper:
                 self.y_down = self.y
 
                 self.down = True
-                
-                print 'Button Press at ({0},{1})'.format(self.x, self.y)
 
         def button_release_event(self, widget, event):
-                gtk.gdk.pointer_ungrab()
-                
                 self.x = int(event.x)
                 self.y = int(event.y)
 
@@ -89,12 +72,16 @@ class ScreenCapper:
 
                 self.down = False
 
-                print 'Button Release at ({0},{1})'.format(self.x, self.y)
 
                 startx = min(self.x_down, self.x_up)
                 starty = min(self.y_down, self.y_up)
                 width  = abs(self.x_down - self.x_up)
                 height = abs(self.y_down - self.y_up)
+
+		if width == 0 and height == 0:
+			self.down = False
+			gtk.main_quit()
+			return
 
                 self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB,
                                              False, 8, width, height)
@@ -104,15 +91,15 @@ class ScreenCapper:
                                               width, height)
                 self.result = True
 
+		gtk.main_quit()
+
         def motion_notify_event(self, widget, event):
                 if not self.down:
                         return
-                if self.old_x and self.old_y:
-                        self.draw_rect()
+                self.draw_rect()
                 
                 self.x = int(event.x)
                 self.y = int(event.y)
-                print event.x, event.y
                 
                 self.old_x = self.x
                 self.old_y = self.y
@@ -120,11 +107,12 @@ class ScreenCapper:
                 self.draw_rect()
 
         def draw_rect(self):
+		if self.old_x is None and self.old_y is None:
+			return
                 startx = min(self.x_down, self.old_x)
                 starty = min(self.y_down, self.old_y)
                 width  = abs(self.x_down - self.old_x)
                 height = abs(self.y_down - self.old_y)
-                print 'Rect:', startx, starty, width, height
                 self.root.draw_rectangle(self.gc, False, startx, starty,
                                          width, height)
 
@@ -145,18 +133,13 @@ class ScreenCapper:
                 gtk.gdk.pointer_grab(self.root,
                                      event_mask = self.mask,
                                      cursor = self.cursor)
+		gtk.gdk.keyboard_grab(self.root)
+		gtk.gdk.event_handler_set(self.handle_event)
 
-                while True:
-                        event = gtk.gdk.event_get()
-                        if event == None:
-                                continue
-                        if event.type == gtk.gdk.BUTTON_PRESS:
-                                self.button_press_event(None, event)
-                        elif event.type == gtk.gdk.BUTTON_RELEASE:
-                                self.button_release_event(None, event)
-                                break
-                        elif event.type == gtk.gdk.MOTION_NOTIFY:
-                                self.motion_notify_event(None, event)
+		gtk.main()
 
-                
+                gtk.gdk.pointer_ungrab()
+		gtk.gdk.keyboard_ungrab()
+		gtk.gdk.event_handler_set(gtk.main_do_event)
+
                 return self.pixbuf
