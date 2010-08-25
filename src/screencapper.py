@@ -103,7 +103,6 @@ class ScreenCapper:
                                               startx, starty, 0, 0,
                                               width, height)
                 self.result = True
-                gtk.main_quit()
 
         def motion_notify_event(self, widget, event):
                 if not self.down:
@@ -146,8 +145,17 @@ class ScreenCapper:
                                      event_mask = self.mask,
                                      cursor = self.cursor)
 
-                gtk.gdk.event_handler_set(self.handle_event)
-                
-                gtk.main()
+                while True:
+                        event = gtk.gdk.event_get()
+                        if event == None:
+                                continue
+                        if event.type == gtk.gdk.BUTTON_PRESS:
+                                self.button_press_event(None, event)
+                        elif event.type == gtk.gdk.BUTTON_RELEASE:
+                                self.button_release_event(None, event)
+                                break
+                        elif event.type == gtk.gdk.MOTION_NOTIFY:
+                                self.motion_notify_event(None, event)
+
                 
                 return self.pixbuf
