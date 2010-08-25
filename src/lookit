@@ -56,10 +56,12 @@ class LookitApp:
 			f.close()
 		except:
 			print "Unable to load prefs"
+			self.prefs = dict()
 			if 'Imgur' in uploader.PROTO_LIST:
-				self.prefs = dict(proto='Imgur')
-			else:
-				self.prefs = dict()
+				self.prefs['proto'] = 'Imgur'
+			self.prefs['shortenurl'] = False
+			self.prefs['trash'] = False
+			self.prefs['savedir'] = os.path.expanduser('~')
 		self.prefs['version'] = common.VERSION
 		f = open(CONF_FILE, 'wb')
 		pickle.dump(self.prefs, f)
@@ -155,6 +157,7 @@ class LookitApp:
 
 	def upload_image(self, image):
 		proto = self.prefs['proto']
+		data = None
 		if proto == 'SSH':
 			success, data = uploader.upload_file_sftp(image,
 					self.prefs['hostname'],
@@ -195,9 +198,12 @@ class LookitApp:
 		if self.prefs['trash']:
 			os.remove(os.path.abspath(image))
 		else:
-			# newimage = 
-			os.rename(os.abspath(image), 
+			# newimage =
+			try:
+				os.rename(os.path.abspath(image), 
 			          os.path.join(self.prefs['savedir'], image))
+			except OSError:
+				print "Error moving file"
 			
 		clip = gtk.Clipboard()
 		clip.set_text(url)
