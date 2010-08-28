@@ -1,5 +1,6 @@
 /build/
 /dist/
 /debian/
+/src/*.png
 *.swp
 *.pyc
