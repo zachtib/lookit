@@ -26,6 +26,7 @@ class PrefDlg:
 
 		self.trash = builder.get_object("trash")
 		self.shortenurl = builder.get_object("shortenurl")
+		self.savedir = builder.get_object("savedir")
 		
 		self.combobox = builder.get_object("combobox")
 		connections = gtk.ListStore(str)
@@ -42,7 +43,7 @@ class PrefDlg:
 		self.username = builder.get_object("username")
 		self.password = builder.get_object("password")
 		self.directory = builder.get_object("directory")
-		self.url = builder.get_object("url")		
+		self.url = builder.get_object("url")
 
 		builder.connect_signals(self)
 
@@ -50,6 +51,7 @@ class PrefDlg:
 		try:
 			self.trash.set_active(prefs['trash'])
 			self.shortenurl.set_active(prefs['shortenurl'])
+			self.savedir.set_filename(prefs['savedir'])
 			try:
 				self.combobox.set_active(
 					CONNECTION_TYPES.index(prefs['proto']))
@@ -100,6 +102,7 @@ class PrefDlg:
 			self.prefs['password'] = self.password.get_text()
 			self.prefs['directory'] = self.directory.get_text()
 			self.prefs['url'] = self.url.get_text()
+			self.prefs['savedir'] = self.savedir.get_filename()
 		else:
 			self.prefs = dict()
 		self.dialog.destroy()

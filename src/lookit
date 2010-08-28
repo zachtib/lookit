@@ -23,6 +23,7 @@ import hashlib
 import os
 import pickle
 import pynotify
+import subprocess
 import sys
 import time
 import urllib
@@ -61,7 +62,10 @@ class LookitApp:
 				self.prefs['proto'] = 'Imgur'
 			self.prefs['shortenurl'] = False
 			self.prefs['trash'] = False
-			self.prefs['savedir'] = os.path.expanduser('~')
+			self.prefs['savedir'] = subprocess.Popen( \
+				['xdg-user-dir', 'PICTURES'], \
+				stdout=subprocess.PIPE).communicate()[0] \
+				.strip('\n')
 		self.prefs['version'] = common.VERSION
 		f = open(CONF_FILE, 'wb')
 		pickle.dump(self.prefs, f)

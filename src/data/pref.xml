@@ -52,9 +52,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="filechooserbutton1">
+                      <object class="GtkFileChooserButton" id="savedir">
                         <property name="visible">True</property>
                         <property name="action">select-folder</property>
+                        <property name="title" translatable="yes">Select A Folder</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
