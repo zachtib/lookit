@@ -29,6 +29,8 @@ import time
 import urllib
 import urlparse
 
+from optparse import OptionParser
+
 try:
 	# Try to import these from current directory, in case running from src
 	import aboutdlg
@@ -241,6 +243,14 @@ class LookitApp:
 		sys.exit(0)
 	
 if __name__=="__main__":
+	parser = OptionParser()
+	parser.add_option('-v', '--version', action='store_true',
+			  dest="version", default=False,
+			  help='Print version number and exit')
+	(options, args) = parser.parse_args()
+	if options.version:
+		print 'Lookit', common.VERSION_STR
+		sys.exit(0)
 	app = LookitApp()
 	app.run()
 
