@@ -20,6 +20,7 @@ import appindicator
 import gobject
 import gtk
 import hashlib
+import keybinder
 import os
 import pickle
 import pynotify
@@ -130,13 +131,16 @@ class LookitApp:
 	
 		self.indicator.set_menu(menu)
 
+		keybinder.bind("<Ctrl><Shift>4", self.capture_area)
+		keybinder.bind("<Ctrl><Shift>3", self.capture_screen)
+
 	def run(self):
 		gtk.main()
 
 	def show_error(self, message):
 		self.show_notification("Error", message)
 
-	def capture_area(self, widget, data=None):
+	def capture_area(self, widget=None, data=None):
 		if not 'proto' in self.prefs.keys():
 			self.show_error('Please set up your preferences first')
 			return
@@ -144,7 +148,7 @@ class LookitApp:
 		pb = s.capture_area()
 		self.process_pixbuf(pb)
 	
-	def capture_screen(self, widget, data=None):
+	def capture_screen(self, widget=None, data=None):
 		if not 'proto' in self.prefs.keys():
 			self.show_error('Please set up your preferences first')
 			return
