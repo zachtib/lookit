@@ -1,6 +1,6 @@
 import os
 
-VERSION = (0, 3, 0)
+VERSION = (0, 3, 1)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 
 def get_data_dir():
