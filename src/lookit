@@ -133,8 +133,8 @@ class LookitApp:
 	
 		self.indicator.set_menu(menu)
 
-		keybinder.bind("<Ctrl><Shift>4", self.capture_area)
-		keybinder.bind("<Ctrl><Shift>3", self.capture_screen)
+		keybinder.bind("<Ctrl><Super>4", self.capture_area)
+		keybinder.bind("<Ctrl><Super>3", self.capture_screen)
 
 	def run(self):
 		gtk.main()
