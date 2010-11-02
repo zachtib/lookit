@@ -20,6 +20,7 @@ import appindicator
 import gobject
 import gtk
 import keybinder
+import keyring
 import os
 import pickle
 import pynotify
@@ -57,6 +58,8 @@ class LookitApp:
 		try:
 			f = open(CONF_FILE, 'rb')
 			self.prefs = pickle.load(f)
+			self.prefs['password'] = \
+				keyring.get_password('lookit', 'lookit')
 			f.close()
 		except:
 			print "Unable to load prefs"
@@ -70,9 +73,14 @@ class LookitApp:
 				stdout=subprocess.PIPE).communicate()[0] \
 				.strip('\n')
 		self.prefs['version'] = common.VERSION
+		p_nopass = dict(self.prefs)
+		p_nopass['password'] = ''
 		f = open(CONF_FILE, 'wb')
-		pickle.dump(self.prefs, f)
+		pickle.dump(p_nopass, f)
 		f.close()
+		keyring.set_password('lookit', 'lookit', \
+				self.prefs['password'])
+		
 
 		self.indicator = appindicator.Indicator(
 			"lookit-indicator",
@@ -233,9 +241,13 @@ class LookitApp:
 		p.run(self.prefs)
 		result = p.get_result()
 		self.prefs.update(result)
+		p_nopass = dict(self.prefs)
+		p_nopass['password'] = ''
 		f = open(CONF_FILE, 'wb')
-		pickle.dump(self.prefs, f)
+		pickle.dump(p_nopass, f)
 		f.close()
+		keyring.set_password('lookit', 'lookit', \
+				self.prefs['password'])
 			
 	
 	def show_about_dlg(self, widget, data=None):
