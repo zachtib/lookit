@@ -69,7 +69,7 @@ class LookitApp:
 				stdout=subprocess.PIPE).communicate()[0] \
 				.strip('\n'))
 			self.config.set('Upload', 'type', 'None')
-		self.config.set('DEFAULT', 'version', common.VERSION)
+		self.config.set('DEFAULT', 'version', common.VERSION_STR)
 		self.config.write(open(CONF_FILE, 'w'))
 
 		self.indicator = appindicator.Indicator(
