@@ -9,8 +9,8 @@ import uploader
 CONNECTION_TYPES = uploader.PROTO_LIST
 
 class PrefDlg:
-	def __init__(self):	
-		self.prefs = dict()
+	def __init__(self):
+		self.prefs = None
 		try:
 			builder = gtk.Builder()
 			datadir = common.get_data_dir()
@@ -47,24 +47,31 @@ class PrefDlg:
 
 		builder.connect_signals(self)
 
-	def run(self, prefs=None):
+	def run(self, config):
 		try:
-			self.trash.set_active(prefs['trash'])
-			self.shortenurl.set_active(prefs['shortenurl'])
-			self.savedir.set_filename(prefs['savedir'])
+			self.combobox.set_active(CONNECTION_TYPES.index('None'))
+			self.trash.set_active( \
+				int(config.getboolean('General', 'trash')))
+			self.shortenurl.set_active( \
+				int(config.getboolean('General', 'shortenurl')))
+			self.savedir.set_filename( \
+				config.get('General', 'savedir'))
 			try:
-				self.combobox.set_active(
-					CONNECTION_TYPES.index(prefs['proto']))
+				self.combobox.set_active( \
+					CONNECTION_TYPES.index( \
+					config.get('Upload', 'type')))
 			except:
 				pass
-			self.server.set_text(prefs['hostname'])
-			self.port.get_adjustment().set_value(prefs['port'])
-			self.username.set_text(prefs['username'])
-			self.password.set_text(prefs['password'])
-			self.directory.set_text(prefs['directory'])
-			self.url.set_text(prefs['url'])
-		except KeyError:
-			self.combobox.set_active(CONNECTION_TYPES.index('None'))
+			self.server.set_text(config.get('Upload', 'hostname'))
+			self.port.get_adjustment().set_value( \
+				config.getint('Upload', 'port'))
+			self.username.set_text(config.get('Upload', 'username'))
+			self.password.set_text(config.get('Upload', 'password'))
+			self.directory.set_text( \
+				config.get('Upload', 'directory'))
+			self.url.set_text(config.get('Upload', 'url'))
+		except:
+			print 'There was an error loading preferences'
 		self.dialog.run()
 
 	def on_proto_changed(self, widget, data=None):
@@ -93,6 +100,7 @@ class PrefDlg:
 
 	def on_pref_dialog_response(self, widget, data=None):
 		if data == 1:
+			self.prefs = dict()
 			self.prefs['trash'] = self.trash.get_active()
 			self.prefs['shortenurl'] = self.shortenurl.get_active()
 			self.prefs['proto'] = self.combobox.get_active_text()
@@ -103,16 +111,26 @@ class PrefDlg:
 			self.prefs['directory'] = self.directory.get_text()
 			self.prefs['url'] = self.url.get_text()
 			self.prefs['savedir'] = self.savedir.get_filename()
-		else:
-			self.prefs = dict()
 		self.dialog.destroy()
 
 	def on_pref_dialog_destroy(self, widget, data=None):
 		if __name__=="__main__":
 			gtk.main_quit() # Exit if this is being run directly
 	
-	def get_result(self):
-		return self.prefs
+	def get_result(self, config):
+		if self.prefs is None:
+			return config
+		config.set('General', 'savedir', self.prefs['savedir'])
+		config.set('General', 'trash', self.prefs['trash'])
+		config.set('General', 'shortenurl', self.prefs['shortenurl'])
+		config.set('Upload', 'type', self.prefs['proto'])
+		config.set('Upload', 'hostname', self.prefs['hostname'])
+		config.set('Upload', 'port', self.prefs['port'])
+		config.set('Upload', 'username', self.prefs['username'])
+		config.set('Upload', 'password', self.prefs['password'])
+		config.set('Upload', 'directory', self.prefs['directory'])
+		config.set('Upload', 'url', self.prefs['url'])
+		return config
 
 if __name__=="__main__":
 	p = PrefDlg() # For testing purposes only

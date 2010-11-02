@@ -22,7 +22,6 @@ import gtk
 import keybinder
 import keyring
 import os
-import pickle
 import pynotify
 import subprocess
 import sys
@@ -37,6 +36,7 @@ try:
 	# Try to import these from current directory, in case running from src
 	import aboutdlg
 	import common
+	import lookitconfig
 	import prefdlg
 	import screencapper
 	import uploader
@@ -44,6 +44,7 @@ except ImportError:
 	# Then fall back to globally installed versions
 	from lookit import aboutdlg
 	from lookit import common
+	from lookit import lookitconfig
 	from lookit import prefdlg
 	from lookit import screencapper
 	from lookit import uploader
@@ -54,33 +55,22 @@ TRASH_DIR = os.path.expanduser('~/.local/share/Trash/files')
 class LookitApp:
 
 	def __init__(self):
-		# Try and load preferences from configuration file
+		self.config = lookitconfig.LookitConfig()
 		try:
-			f = open(CONF_FILE, 'rb')
-			self.prefs = pickle.load(f)
-			self.prefs['password'] = \
-				keyring.get_password('lookit', 'lookit')
-			f.close()
+			self.config.read(CONF_FILE)
+			self.config.get('Upload', 'type')
 		except:
-			print "Unable to load prefs"
-			self.prefs = dict()
-			if 'Imgur' in uploader.PROTO_LIST:
-				self.prefs['proto'] = 'Imgur'
-			self.prefs['shortenurl'] = False
-			self.prefs['trash'] = False
-			self.prefs['savedir'] = subprocess.Popen( \
-				['xdg-user-dir', 'PICTURES'], \
+			self.config.add_section('General')
+			self.config.add_section('Upload')
+			self.config.set('General', 'shortenurl', False)
+			self.config.set('General', 'trash', False)
+			self.config.set('General', 'savedir', \
+				subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
 				stdout=subprocess.PIPE).communicate()[0] \
-				.strip('\n')
-		self.prefs['version'] = common.VERSION
-		p_nopass = dict(self.prefs)
-		p_nopass['password'] = ''
-		f = open(CONF_FILE, 'wb')
-		pickle.dump(p_nopass, f)
-		f.close()
-		keyring.set_password('lookit', 'lookit', \
-				self.prefs['password'])
-		
+				.strip('\n'))
+			self.config.set('Upload', 'type', 'None')
+		self.config.set('DEFAULT', 'version', common.VERSION)
+		self.config.write(open(CONF_FILE, 'w'))
 
 		self.indicator = appindicator.Indicator(
 			"lookit-indicator",
@@ -151,17 +141,11 @@ class LookitApp:
 		self.show_notification("Error", message)
 
 	def capture_area(self, widget=None, data=None):
-		if not 'proto' in self.prefs.keys():
-			self.show_error('Please set up your preferences first')
-			return
 		s = screencapper.ScreenCapper()
 		pb = s.capture_area()
 		self.process_pixbuf(pb)
 	
 	def capture_screen(self, widget=None, data=None):
-		if not 'proto' in self.prefs.keys():
-			self.show_error('Please set up your preferences first')
-			return
 		time.sleep(1) # Give the menu time to disappear
 		s = screencapper.ScreenCapper()
 		pb = s.capture_screen()
@@ -176,25 +160,25 @@ class LookitApp:
 			self.show_error('Unable to get screenshot')
 
 	def upload_image(self, image):
-		proto = self.prefs['proto']
+		proto = self.config.get('Upload', 'type')
 		data = None
 		if proto == 'SSH':
 			success, data = uploader.upload_file_sftp(image,
-					self.prefs['hostname'],
-					self.prefs['port'],
-					self.prefs['username'],
-					self.prefs['password'],
-					self.prefs['directory'],
-					self.prefs['url'],
+					self.config.get('Upload', 'hostname'),
+					self.config.get('Upload', 'port'),
+					self.config.get('Upload', 'username'),
+					self.config.get('Upload', 'password'),
+					self.config.get('Upload', 'directory'),
+					self.config.get('Upload', 'url'),
 					)
 		elif proto == 'FTP':
 			success, data = uploader.upload_file_ftp(image,
-					self.prefs['hostname'],
-					self.prefs['port'],
-					self.prefs['username'],
-					self.prefs['password'],
-					self.prefs['directory'],
-					self.prefs['url'],
+					self.config.get('Upload', 'hostname'),
+					self.config.get('Upload', 'port'),
+					self.config.get('Upload', 'username'),
+					self.config.get('Upload', 'password'),
+					self.config.get('Upload', 'directory'),
+					self.config.get('Upload', 'url'),
 					)
 		elif proto == 'Imgur':
 			success, data = uploader.upload_file_imgur(image)
@@ -209,20 +193,22 @@ class LookitApp:
 		if data:
 			url = data['original_image']
 		else:
-			url = urlparse.urljoin(self.prefs['url'], \
-					os.path.basename(image))
-		if self.prefs['shortenurl'] and proto != 'None':
+			url = urlparse.urljoin(self.config.get( \
+				'Upload', 'url'), os.path.basename(image))
+		if self.config.get('General', 'shortenurl') and \
+				proto != 'None':
 			url = urllib.urlopen(
 				'http://is.gd/api.php?longurl={0}'
 				.format(url)).readline()
 			print "URL Shortened:", url
-		if self.prefs['trash']:
+		if self.config.get('General', 'trash'):
 			os.remove(os.path.abspath(image))
 		else:
 			# newimage =
 			try:
 				os.rename(os.path.abspath(image), 
-			          os.path.join(self.prefs['savedir'], image))
+			        	os.path.join(self.config.get( \
+					'General', 'savedir'), image))
 			except OSError:
 				print "Error moving file"
 			
@@ -238,17 +224,9 @@ class LookitApp:
 	
 	def show_pref_dlg(self, widget, data=None):
 		p = prefdlg.PrefDlg()
-		p.run(self.prefs)
-		result = p.get_result()
-		self.prefs.update(result)
-		p_nopass = dict(self.prefs)
-		p_nopass['password'] = ''
-		f = open(CONF_FILE, 'wb')
-		pickle.dump(p_nopass, f)
-		f.close()
-		keyring.set_password('lookit', 'lookit', \
-				self.prefs['password'])
-			
+		p.run(self.config)
+		self.config = p.get_result(self.config)
+		self.config.write(open(CONF_FILE, 'w'))
 	
 	def show_about_dlg(self, widget, data=None):
 		aboutdlg.AboutDlg().run()
