@@ -19,13 +19,13 @@
 import appindicator
 import gobject
 import gtk
-import hashlib
 import keybinder
 import os
 import pickle
 import pynotify
 import subprocess
 import sys
+import tempfile
 import time
 import urllib
 import urlparse
@@ -160,12 +160,10 @@ class LookitApp:
 		self.process_pixbuf(pb)
 
 	def process_pixbuf(self, pb):
-		if pb != None:
-			m = hashlib.md5()
-			m.update(pb.get_pixels())
-			hashstring = m.hexdigest() + '.png'
-			pb.save(hashstring, 'png')
-			self.upload_image(hashstring)
+		if pb is not None:
+			fname = tempfile.mktemp(suffix='.png', prefix='')
+			pb.save(fname, 'png')
+			self.upload_image(fname)
 		else:
 			self.show_error('Unable to get screenshot')
 
@@ -203,7 +201,8 @@ class LookitApp:
 		if data:
 			url = data['original_image']
 		else:
-			url = urlparse.urljoin(self.prefs['url'], image)
+			url = urlparse.urljoin(self.prefs['url'], \
+					os.path.basename(image))
 		if self.prefs['shortenurl'] and proto != 'None':
 			url = urllib.urlopen(
 				'http://is.gd/api.php?longurl={0}'

@@ -103,7 +103,7 @@ def upload_file_sftp(f, hostname, port, username, password, directory, url):
 	except IOError:
 		return False, 'Destination directory does not exist'
 	
-	sftp.put(f, f)
+	sftp.put(f, os.path.basename(f))
 
 	return True, None
 
