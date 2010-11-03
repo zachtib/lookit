@@ -105,7 +105,7 @@ class PrefDlg:
 			self.prefs['shortenurl'] = self.shortenurl.get_active()
 			self.prefs['proto'] = self.combobox.get_active_text()
 			self.prefs['hostname'] = self.server.get_text()
-			self.prefs['port'] = int(self.port.get_text())
+			self.prefs['port'] = self.port.get_value_as_int()
 			self.prefs['username'] = self.username.get_text()
 			self.prefs['password'] = self.password.get_text()
 			self.prefs['directory'] = self.directory.get_text()
