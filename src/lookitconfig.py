@@ -20,3 +20,4 @@ class LookitConfig(RawConfigParser):
                 for (name, value) in self.items(old_name):
                         self.set(new_name, name, value)
                 self.remove_section(old_name)
+                return True
