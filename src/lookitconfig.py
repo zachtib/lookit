@@ -13,3 +13,10 @@ class LookitConfig(RawConfigParser):
 			keyring.set_password('lookit', 'lookit', value)
 		else:
 			RawConfigParser.set(self, section, option, value)
+
+        def rename_section(self, old_name, new_name):
+                if not self.has_section(old_name) or self.has_section(new_name):
+                        return False
+                for (name, value) in self.items(old_name):
+                        self.set(new_name, name, value)
+                self.remove_section(old_name)
