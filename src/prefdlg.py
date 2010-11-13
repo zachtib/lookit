@@ -45,6 +45,9 @@ class PrefDlg:
 		self.directory = builder.get_object("directory")
 		self.url = builder.get_object("url")
 
+                self.caparea = builder.get_object("caparea")
+                self.capscreen = builder.get_object("capscreen")
+
 		builder.connect_signals(self)
 
 	def run(self, config):
