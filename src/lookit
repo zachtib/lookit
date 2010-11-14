@@ -56,20 +56,8 @@ class LookitApp:
 
 	def __init__(self):
 		self.config = lookitconfig.LookitConfig()
-		try:
-			self.config.read(CONF_FILE)
-			self.config.get('Upload', 'type')
-		except:
-			self.config.add_section('General')
-			self.config.add_section('Upload')
-			self.config.set('General', 'shortenurl', False)
-			self.config.set('General', 'trash', False)
-			self.config.set('General', 'savedir', \
-				subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
-				stdout=subprocess.PIPE).communicate()[0] \
-				.strip('\n'))
-			self.config.set('Upload', 'type', 'None')
-		self.config.set('DEFAULT', 'version', common.VERSION_STR)
+		self.config.read(CONF_FILE)
+		self.config.set('General', 'version', common.VERSION_STR)
 		self.config.write(open(CONF_FILE, 'w'))
 
 		self.indicator = appindicator.Indicator(
