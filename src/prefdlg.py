@@ -122,7 +122,7 @@ class PrefDlg:
                                 self.capscreen.get_text())
 
 			
-                        self.config.set('Upload', 'proto',
+                        self.config.set('Upload', 'type',
                                 self.combobox.get_active_text())
 			self.config.set('Upload', 'hostname',
                                 self.server.get_text())
