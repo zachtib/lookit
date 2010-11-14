@@ -51,6 +51,7 @@ class PrefDlg:
 		builder.connect_signals(self)
 
 	def run(self, config):
+                self.config = config
 		try:
 			self.combobox.set_active(CONNECTION_TYPES.index('None'))
 			self.trash.set_active( \
@@ -104,36 +105,35 @@ class PrefDlg:
 	def on_pref_dialog_response(self, widget, data=None):
 		if data == 1:
 			self.prefs = dict()
-			self.prefs['trash'] = self.trash.get_active()
-			self.prefs['shortenurl'] = self.shortenurl.get_active()
-			self.prefs['proto'] = self.combobox.get_active_text()
-			self.prefs['hostname'] = self.server.get_text()
-			self.prefs['port'] = self.port.get_value_as_int()
-			self.prefs['username'] = self.username.get_text()
-			self.prefs['password'] = self.password.get_text()
-			self.prefs['directory'] = self.directory.get_text()
-			self.prefs['url'] = self.url.get_text()
-			self.prefs['savedir'] = self.savedir.get_filename()
+                        self.config.set('General', 'trash',
+                                self.trash.get_active())
+                        self.config.set('General', 'shortenurl',
+                                self.shortenurl.get_active())
+                        self.config.set('General', 'savedir',
+                                self.savedir.get_filename())
+			
+                        self.config.set('Upload', 'proto',
+                                self.combobox.get_active_text())
+			self.config.set('Upload', 'hostname',
+                                self.server.get_text())
+			self.config.set('Upload', 'port',
+                                self.port.get_value_as_int())
+			self.config.set('Upload', 'username',
+                                self.username.get_text())
+			self.config.set('Upload', 'password',
+                                self.password.get_text())
+			self.config.set('Upload', 'directory',
+                                self.directory.get_text())
+			self.config.set('Upload', 'url',
+                                self.url.get_text())
 		self.dialog.destroy()
 
 	def on_pref_dialog_destroy(self, widget, data=None):
 		if __name__=="__main__":
 			gtk.main_quit() # Exit if this is being run directly
 	
-	def get_result(self, config):
-		if self.prefs is None:
-			return config
-		config.set('General', 'savedir', self.prefs['savedir'])
-		config.set('General', 'trash', self.prefs['trash'])
-		config.set('General', 'shortenurl', self.prefs['shortenurl'])
-		config.set('Upload', 'type', self.prefs['proto'])
-		config.set('Upload', 'hostname', self.prefs['hostname'])
-		config.set('Upload', 'port', self.prefs['port'])
-		config.set('Upload', 'username', self.prefs['username'])
-		config.set('Upload', 'password', self.prefs['password'])
-		config.set('Upload', 'directory', self.prefs['directory'])
-		config.set('Upload', 'url', self.prefs['url'])
-		return config
+	def get_result(self):
+		return self.config
 
 if __name__=="__main__":
 	p = PrefDlg() # For testing purposes only
