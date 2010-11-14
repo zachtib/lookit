@@ -213,9 +213,11 @@ class LookitApp:
 		pynotify.Notification(msg_title, msg_body).show()
 
         def unbind_all(self):
-		keybinder.unbind(self.config.get('Hotkeys', 'caparea'))
-		keybinder.unbind(self.config.get('Hotkeys', 'capscreen'))
-                
+                for (key, value) in self.config.items('Hotkeys'):
+                        try:
+                                keybinder.unbind(value)
+                        except KeyError:
+                                pass
 
         def bind_all(self):
 		keybinder.bind(self.config.get('Hotkeys', 'caparea'), 
