@@ -52,34 +52,30 @@ class PrefDlg:
 
 	def run(self, config):
                 self.config = config
-		try:
-			self.combobox.set_active(CONNECTION_TYPES.index('None'))
-			self.trash.set_active( \
-				int(config.getboolean('General', 'trash')))
-			self.shortenurl.set_active( \
-				int(config.getboolean('General', 'shortenurl')))
-			self.savedir.set_filename( \
-				config.get('General', 'savedir'))
-                        self.caparea.set_text(config.get('Hotkeys', 'caparea'))
-                        self.capscreen.set_text(config.get('Hotkeys',
-                                                'capscreen'))
-			try:
-				self.combobox.set_active( \
-					CONNECTION_TYPES.index( \
-					config.get('Upload', 'type')))
-			except:
-				pass
-			self.server.set_text(config.get('Upload', 'hostname'))
-			self.port.get_adjustment().set_value( \
-				config.getint('Upload', 'port'))
-			self.username.set_text(config.get('Upload', 'username'))
-			self.password.set_text(config.get('Upload', 'password'))
-			self.directory.set_text( \
-				config.get('Upload', 'directory'))
-			self.url.set_text(config.get('Upload', 'url'))
-		except Exception as e:
-			print 'There was an error loading preferences'
-                        print e
+                self.combobox.set_active(CONNECTION_TYPES.index('None'))
+                self.trash.set_active( \
+                        int(config.getboolean('General', 'trash')))
+                self.shortenurl.set_active( \
+                        int(config.getboolean('General', 'shortenurl')))
+                self.savedir.set_filename( \
+                        config.get('General', 'savedir'))
+                self.caparea.set_text(config.get('Hotkeys', 'caparea'))
+                self.capscreen.set_text(config.get('Hotkeys',
+                                        'capscreen'))
+                try:
+                        self.combobox.set_active( \
+                                CONNECTION_TYPES.index( \
+                                config.get('Upload', 'type')))
+                except:
+                        pass
+                self.server.set_text(config.get('Upload', 'hostname'))
+                self.port.get_adjustment().set_value( \
+                        config.getint('Upload', 'port'))
+                self.username.set_text(config.get('Upload', 'username'))
+                self.password.set_text(config.get('Upload', 'password'))
+                self.directory.set_text( \
+                        config.get('Upload', 'directory'))
+                self.url.set_text(config.get('Upload', 'url'))
 		self.dialog.run()
 
 	def on_proto_changed(self, widget, data=None):
