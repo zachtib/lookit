@@ -60,6 +60,9 @@ class PrefDlg:
 				int(config.getboolean('General', 'shortenurl')))
 			self.savedir.set_filename( \
 				config.get('General', 'savedir'))
+                        self.caparea.set_text(config.get('Hotkeys', 'caparea'))
+                        self.capscreen.set_text(config.get('Hotkeys',
+                                                'capscreen'))
 			try:
 				self.combobox.set_active( \
 					CONNECTION_TYPES.index( \
@@ -74,8 +77,9 @@ class PrefDlg:
 			self.directory.set_text( \
 				config.get('Upload', 'directory'))
 			self.url.set_text(config.get('Upload', 'url'))
-		except:
+		except Exception as e:
 			print 'There was an error loading preferences'
+                        print e
 		self.dialog.run()
 
 	def on_proto_changed(self, widget, data=None):
@@ -111,6 +115,12 @@ class PrefDlg:
                                 self.shortenurl.get_active())
                         self.config.set('General', 'savedir',
                                 self.savedir.get_filename())
+                        
+                        self.config.set('Hotkeys', 'caparea',
+                                self.caparea.get_text())
+                        self.config.set('Hotkeys', 'capscreen',
+                                self.capscreen.get_text())
+
 			
                         self.config.set('Upload', 'proto',
                                 self.combobox.get_active_text())

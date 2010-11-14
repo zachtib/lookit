@@ -27,7 +27,7 @@ class LookitConfig(RawConfigParser):
                 
                 self.add_section('Upload')
                 self.set('Upload', 'type', 'None')
-                self.set('Upload', 'server', '')
+                self.set('Upload', 'hostname', '')
                 self.set('Upload', 'port', 0)
                 self.set('Upload', 'username', '')
                 self.set('Upload', 'directory', '')

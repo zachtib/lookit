@@ -56,7 +56,10 @@ class LookitApp:
 
 	def __init__(self):
 		self.config = lookitconfig.LookitConfig()
-		self.config.read(CONF_FILE)
+		try:
+                        self.config.read(CONF_FILE)
+                except:
+                        pass
 		self.config.set('General', 'version', common.VERSION_STR)
 		self.config.write(open(CONF_FILE, 'w'))
 
@@ -119,8 +122,7 @@ class LookitApp:
 	
 		self.indicator.set_menu(menu)
 
-		keybinder.bind("<Ctrl><Super>4", self.capture_area)
-		keybinder.bind("<Ctrl><Super>3", self.capture_screen)
+                self.bind_all()
 
 	def run(self):
 		gtk.main()
@@ -209,12 +211,25 @@ class LookitApp:
 
 	def show_notification(self, msg_title, msg_body):
 		pynotify.Notification(msg_title, msg_body).show()
+
+        def unbind_all(self):
+		keybinder.unbind(self.config.get('Hotkeys', 'caparea'))
+		keybinder.unbind(self.config.get('Hotkeys', 'capscreen'))
+                
+
+        def bind_all(self):
+		keybinder.bind(self.config.get('Hotkeys', 'caparea'), 
+                        self.capture_area)
+		keybinder.bind(self.config.get('Hotkeys', 'capscreen'),
+                        self.capture_screen)
 	
 	def show_pref_dlg(self, widget, data=None):
+                self.unbind_all()
 		p = prefdlg.PrefDlg()
 		p.run(self.config)
-		self.config = p.get_result(self.config)
+		p.get_result()
 		self.config.write(open(CONF_FILE, 'w'))
+                self.bind_all()
 	
 	def show_about_dlg(self, widget, data=None):
 		aboutdlg.AboutDlg().run()
