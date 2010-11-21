@@ -155,7 +155,7 @@ class LookitApp:
 		if proto == 'SSH':
 			success, data = uploader.upload_file_sftp(image,
 					self.config.get('Upload', 'hostname'),
-					self.config.get('Upload', 'port'),
+					int(self.config.get('Upload', 'port')),
 					self.config.get('Upload', 'username'),
 					self.config.get('Upload', 'password'),
 					self.config.get('Upload', 'directory'),
@@ -164,7 +164,7 @@ class LookitApp:
 		elif proto == 'FTP':
 			success, data = uploader.upload_file_ftp(image,
 					self.config.get('Upload', 'hostname'),
-					self.config.get('Upload', 'port'),
+					int(self.config.get('Upload', 'port')),
 					self.config.get('Upload', 'username'),
 					self.config.get('Upload', 'password'),
 					self.config.get('Upload', 'directory'),
