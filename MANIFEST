@@ -10,6 +10,7 @@ src/common.py
 src/lookit
 src/prefdlg.py
 src/screencapper.py
+src/lookitconfig.py
 src/uploader.py
 src/data/about.xml
 src/data/pref.xml
