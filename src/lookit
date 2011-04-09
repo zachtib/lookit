@@ -29,6 +29,7 @@ import tempfile
 import time
 import urllib
 import urlparse
+import shutil
 
 from optparse import OptionParser
 
@@ -145,9 +146,9 @@ class LookitApp:
 
 	def process_pixbuf(self, pb):
 		if pb is not None:
-			fname = tempfile.mktemp(suffix='.png', prefix='')
-			pb.save(fname, 'png')
-			self.upload_image(fname)
+			ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
+			pb.save_to_callback(ftmp.write, 'png')
+			self.upload_image(ftmp.name)
 		else:
 			self.show_error('Unable to get screenshot')
 
@@ -185,7 +186,6 @@ class LookitApp:
 			finally:
 				f.close()
 			notification.close()
-
 		elif proto == 'None':
 			success = True
 		else:
@@ -205,15 +205,22 @@ class LookitApp:
 				'http://is.gd/api.php?longurl={0}'
 				.format(url)).readline()
 			print "URL Shortened:", url
-		if self.config.get('General', 'trash'):
+		if self.config.getboolean('General', 'trash'):
 			os.remove(os.path.abspath(image))
 		else:
 			# newimage =
 			try:
-				os.rename(os.path.abspath(image), 
-			        	os.path.join(self.config.get( \
-					'General', 'savedir'), image))
-			except OSError:
+				timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+				filename = timestamp + '.png'
+				destination = os.path.join(self.config.get('General', 'savedir'), filename)
+				i = 0
+				while os.path.exists(destination):
+					filename = timestamp + '_' + str(i) + '.png'
+					destination = os.path.join(self.config.get('General', 'savedir'), filename)
+				i += 1
+				shutil.move(image, destination)
+				image = destination
+			except IOError:
 				print "Error moving file"
 			
 		clip = gtk.Clipboard()
