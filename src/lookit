@@ -51,6 +51,8 @@ except ImportError:
 
 CONF_FILE = os.path.expanduser('~/.config/lookit.conf')
 TRASH_DIR = os.path.expanduser('~/.local/share/Trash/files')
+XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
+LOG_FILE = os.path.join(XDG_CACHE_HOME, 'lookit.log')
 
 class LookitApp:
 
@@ -171,7 +173,19 @@ class LookitApp:
 					self.config.get('Upload', 'url'),
 					)
 		elif proto == 'Imgur':
+			notification = pynotify.Notification('Uploading image', 'Uploading image to Imgur')
+			notification.show()
 			success, data = uploader.upload_file_imgur(image)
+			try:
+				f = open(LOG_FILE, 'ab')
+				f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
+				f.write('Delete url: ' + data['delete_page'] + '\n')
+			except IOError, e:
+				pass
+			finally:
+				f.close()
+			notification.close()
+
 		elif proto == 'None':
 			success = True
 		else:
