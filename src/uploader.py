@@ -112,7 +112,10 @@ def upload_file_imgur(f):
 		print 'Error: Imgur not supported'
 	i = ImgurUploader()
 	i.upload(f)
-	return True, i.mapping
+	if not 'error_msg' in i.mapping:
+		return True, i.mapping
+	else:
+		return False, i.mapping.get('error_msg')
 
 def upload_file_ubuntuone(f):
 	pass
