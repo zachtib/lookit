@@ -46,6 +46,15 @@ class LookitConfig(RawConfigParser):
             return RawConfigParser.get(self, section, option)
 
     def set(self, section, option, value):
+        if option == 'autostart':
+            try:
+                if value:
+                    os.symlink('/usr/share/applications/lookit.desktop',\
+                        os.path.expanduser('~/.config/autostart/lookit.desktop'))
+                else:
+                    os.unlink(os.path.expanduser('~/.config/autostart/lookit.desktop'))
+            except OSError:
+                pass
         if option == 'password':
             keyring.set_password('lookit', 'lookit', value)
         else:
