@@ -27,6 +27,7 @@ class PrefDlg:
 		self.trash = builder.get_object("trash")
 		self.shortenurl = builder.get_object("shortenurl")
 		self.savedir = builder.get_object("savedir")
+		self.autostart = builder.get_object("autostart")
 		
 		self.combobox = builder.get_object("combobox")
 		connections = gtk.ListStore(str)
@@ -59,6 +60,8 @@ class PrefDlg:
                         int(config.getboolean('General', 'shortenurl')))
                 self.savedir.set_filename( \
                         config.get('General', 'savedir'))
+                self.autostart.set_active( \
+                        int(config.getboolean('General', 'autostart')))
                 self.caparea.set_text(config.get('Hotkeys', 'caparea'))
                 self.capscreen.set_text(config.get('Hotkeys',
                                         'capscreen'))
@@ -111,6 +114,8 @@ class PrefDlg:
                                 self.shortenurl.get_active())
                         self.config.set('General', 'savedir',
                                 self.savedir.get_filename())
+                        self.config.set('General', 'autostart',
+                                self.autostart.get_active())
                         
                         self.config.set('Hotkeys', 'caparea',
                                 self.caparea.get_text())

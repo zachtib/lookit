@@ -20,6 +20,7 @@ class LookitConfig(RawConfigParser):
         self.set('General', 'shortenurl', False)
         self.set('General', 'trash', False)
         self.set('General', 'savedir', PICTURE_DIR)
+        self.set('General', 'autostart', True)
 
         self.add_section('Hotkeys')
         self.set('Hotkeys', 'caparea', '<Ctrl><Super>4')
