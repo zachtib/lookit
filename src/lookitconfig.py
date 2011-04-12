@@ -4,11 +4,11 @@ import os
 import subprocess
 
 try:
-        PICTURE_DIR = subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
+    PICTURE_DIR = subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
                 stdout=subprocess.PIPE).communicate()[0] \
                 .strip('\n')
 except OSError:
-        PICTURE_DIR = os.path.expanduser('~')
+    PICTURE_DIR = os.path.expanduser('~')
 
 class LookitConfig(RawConfigParser):
     def __init__(self):
@@ -49,10 +49,12 @@ class LookitConfig(RawConfigParser):
         if option == 'autostart':
             try:
                 if value:
-                    os.symlink('/usr/share/applications/lookit.desktop',\
-                        os.path.expanduser('~/.config/autostart/lookit.desktop'))
+                    os.symlink('/usr/share/applications/lookit.desktop', \
+                        os.path.expanduser( \
+                        '~/.config/autostart/lookit.desktop'))
                 else:
-                    os.unlink(os.path.expanduser('~/.config/autostart/lookit.desktop'))
+                    os.unlink(os.path.expanduser( \
+                        '~/.config/autostart/lookit.desktop'))
             except OSError:
                 pass
         if option == 'password':
@@ -80,6 +82,6 @@ class LookitConfig(RawConfigParser):
             return value == "True"
 
 if __name__ == '__main__':
-        lc = LookitConfig()
-        lc.load_defaults()
+    lc = LookitConfig()
+    lc.load_defaults()
 
