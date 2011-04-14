@@ -79,7 +79,12 @@ class LookitConfig(RawConfigParser):
             # Until I figure it out, this will act as a band-aid
             # to prevent the error from causing Lookit to not work
             value = self.get(section, option)
-            return value == "True"
+            if type(value) == bool:
+                return value
+            elif type(value) == str:
+                return value == 'True'
+            else:
+                return bool(value)
 
 if __name__ == '__main__':
     lc = LookitConfig()

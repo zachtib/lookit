@@ -54,12 +54,10 @@ class PrefDlg:
     def run(self, config):
         self.config = config
         self.combobox.set_active(CONNECTION_TYPES.index('None'))
-        self.trash.set_active(int(config.getboolean('General', 'trash')))
-        self.shortenurl.set_active( \
-            int(config.getboolean('General', 'shortenurl')))
+        self.trash.set_active(config.getboolean('General', 'trash'))
+        self.shortenurl.set_active(config.getboolean('General', 'shortenurl'))
         self.savedir.set_filename(config.get('General', 'savedir'))
-        self.autostart.set_active(\
-            int(config.getboolean('General', 'autostart')))
+        self.autostart.set_active(config.getboolean('General', 'autostart'))
         self.caparea.set_text(config.get('Hotkeys', 'caparea'))
         self.capscreen.set_text(config.get('Hotkeys', 'capscreen'))
         try:
