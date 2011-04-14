@@ -34,21 +34,21 @@ import shutil
 from optparse import OptionParser
 
 try:
-	# Try to import these from current directory, in case running from src
-	import aboutdlg
-	import common
-	import lookitconfig
-	import prefdlg
-	import screencapper
-	import uploader
+    # Try to import these from current directory, in case running from src
+    import aboutdlg
+    import common
+    import lookitconfig
+    import prefdlg
+    import screencapper
+    import uploader
 except ImportError:
-	# Then fall back to globally installed versions
-	from lookit import aboutdlg
-	from lookit import common
-	from lookit import lookitconfig
-	from lookit import prefdlg
-	from lookit import screencapper
-	from lookit import uploader
+    # Then fall back to globally installed versions
+    from lookit import aboutdlg
+    from lookit import common
+    from lookit import lookitconfig
+    from lookit import prefdlg
+    from lookit import screencapper
+    from lookit import uploader
 
 CONF_FILE = os.path.expanduser('~/.config/lookit.conf')
 TRASH_DIR = os.path.expanduser('~/.local/share/Trash/files')
@@ -57,219 +57,215 @@ LOG_FILE = os.path.join(XDG_CACHE_HOME, 'lookit.log')
 
 class LookitApp:
 
-	def __init__(self):
-		self.config = lookitconfig.LookitConfig()
-		try:
-                        self.config.read(CONF_FILE)
-                except:
-                        pass
-		self.config.set('General', 'version', common.VERSION_STR)
-		self.config.write(open(CONF_FILE, 'w'))
+    def __init__(self):
+        self.config = lookitconfig.LookitConfig()
+        try:
+            self.config.read(CONF_FILE)
+        except:
+            print 'An error occurred reading from', CONF_FILE
+        self.config.set('General', 'version', common.VERSION_STR)
+        self.config.write(open(CONF_FILE, 'w'))
 
-		self.indicator = appindicator.Indicator(
-			"lookit-indicator",
-			"lookit",
-			appindicator.CATEGORY_APPLICATION_STATUS)
-		self.indicator.set_status(appindicator.STATUS_ACTIVE)
+        self.indicator = appindicator.Indicator(
+            "lookit-indicator",
+            "lookit",
+            appindicator.CATEGORY_APPLICATION_STATUS)
+        self.indicator.set_status(appindicator.STATUS_ACTIVE)
 
-		try:
-			# Check for special Ubuntu themes.
-			# This is an ugly, ugly hack
-			theme = gtk.gdk.screen_get_default().get_setting(
-							'gtk-icon-theme-name')
-			if theme == 'ubuntu-mono-dark':
-				self.indicator.set_icon('lookit-dark')
-			elif theme == 'ubuntu-mono-light':
-				self.indicator.set_icon('lookit-light')
-			# Oh god, it hurt to even type that, I need to find
-			# a better solution, but it won't see the icons if I
-			# install them manually whhhaaarrgggbbbbllll
-		except ValueError:
-			# Couldn't find the setting, probably not running gnome
-			print "Warning: Couldn't detect gtk theme"
-		
-		menu = gtk.Menu()
-		
-		item = gtk.MenuItem("Capture Area")
-		item.connect("activate", self.capture_area)
-		item.show()
-		menu.append(item)
-	
-		item = gtk.MenuItem("Capture Entire Screen")
-		item.connect("activate", self.capture_screen)
-		item.show()
-		menu.append(item)
-	
-		item = gtk.SeparatorMenuItem()
-		item.show()
-		menu.append(item)
-	
-		item = gtk.MenuItem("Preferences")
-		item.connect("activate", self.show_pref_dlg)
-		item.show()
-		menu.append(item)
-	
-		item = gtk.MenuItem("About")
-		item.connect("activate", self.show_about_dlg)
-		item.show()
-		menu.append(item)
-	
-		item = gtk.SeparatorMenuItem()
-		item.show()
-		menu.append(item)
-		
-		item = gtk.MenuItem("Exit")
-		item.connect("activate", self.exit)
-		item.show()
-		menu.append(item)
-	
-		self.indicator.set_menu(menu)
+        try:
+            # Check for special Ubuntu themes.
+            # This is an ugly, ugly hack
+            theme = gtk.gdk.screen_get_default().get_setting(
+                            'gtk-icon-theme-name')
+            if theme == 'ubuntu-mono-dark':
+                self.indicator.set_icon('lookit-dark')
+            elif theme == 'ubuntu-mono-light':
+                self.indicator.set_icon('lookit-light')
+            # Oh god, it hurt to even type that, I need to find
+            # a better solution, but it won't see the icons if I
+            # install them manually whhhaaarrgggbbbbllll
+        except ValueError:
+            # Couldn't find the setting, probably not running gnome
+            print "Warning: Couldn't detect gtk theme"
+        
+        menu = gtk.Menu()
+        
+        item = gtk.MenuItem("Capture Area")
+        item.connect("activate", self.capture_area)
+        item.show()
+        menu.append(item)
+    
+        item = gtk.MenuItem("Capture Entire Screen")
+        item.connect("activate", self.capture_screen)
+        item.show()
+        menu.append(item)
+    
+        item = gtk.SeparatorMenuItem()
+        item.show()
+        menu.append(item)
+    
+        item = gtk.MenuItem("Preferences")
+        item.connect("activate", self.show_pref_dlg)
+        item.show()
+        menu.append(item)
+    
+        item = gtk.MenuItem("About")
+        item.connect("activate", self.show_about_dlg)
+        item.show()
+        menu.append(item)
+    
+        item = gtk.SeparatorMenuItem()
+        item.show()
+        menu.append(item)
+        
+        item = gtk.MenuItem("Exit")
+        item.connect("activate", self.exit)
+        item.show()
+        menu.append(item)
+    
+        self.indicator.set_menu(menu)
 
-                self.bind_all()
+        self.bind_all()
 
-	def run(self):
-		gtk.main()
+    def run(self):
+        gtk.main()
 
-	def show_error(self, message):
-		self.show_notification("Error", message)
+    def show_error(self, message):
+        self.show_notification("Error", message)
 
-	def capture_area(self, widget=None, data=None):
-		s = screencapper.ScreenCapper()
-		pb = s.capture_area()
-		self.process_pixbuf(pb)
-	
-	def capture_screen(self, widget=None, data=None):
-		time.sleep(1) # Give the menu time to disappear
-		s = screencapper.ScreenCapper()
-		pb = s.capture_screen()
-		self.process_pixbuf(pb)
+    def capture_area(self, widget=None, data=None):
+        s = screencapper.ScreenCapper()
+        pb = s.capture_area()
+        self.process_pixbuf(pb)
+    
+    def capture_screen(self, widget=None, data=None):
+        time.sleep(1) # Give the menu time to disappear
+        s = screencapper.ScreenCapper()
+        pb = s.capture_screen()
+        self.process_pixbuf(pb)
 
-	def process_pixbuf(self, pb):
-		if pb is not None:
-			ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
-			pb.save_to_callback(ftmp.write, 'png')
-			self.upload_image(ftmp.name)
-		else:
-			self.show_error('Unable to get screenshot')
+    def process_pixbuf(self, pb):
+        if pb is not None:
+            ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
+            pb.save_to_callback(ftmp.write, 'png')
+            self.upload_image(ftmp.name)
+        else:
+            self.show_error('Unable to get screenshot')
 
-	def upload_image(self, image):
-		proto = self.config.get('Upload', 'type')
-		data = None
-		if proto == 'SSH':
-			success, data = uploader.upload_file_sftp(image,
-					self.config.get('Upload', 'hostname'),
-					int(self.config.get('Upload', 'port')),
-					self.config.get('Upload', 'username'),
-					self.config.get('Upload', 'password'),
-					self.config.get('Upload', 'directory'),
-					self.config.get('Upload', 'url'),
-					)
-		elif proto == 'FTP':
-			success, data = uploader.upload_file_ftp(image,
-					self.config.get('Upload', 'hostname'),
-					int(self.config.get('Upload', 'port')),
-					self.config.get('Upload', 'username'),
-					self.config.get('Upload', 'password'),
-					self.config.get('Upload', 'directory'),
-					self.config.get('Upload', 'url'),
-					)
-		elif proto == 'Imgur':
-			notification = pynotify.Notification('Uploading image', 'Uploading image to Imgur')
-			notification.show()
-			success, data = uploader.upload_file_imgur(image)
-			try:
-				f = open(LOG_FILE, 'ab')
-				f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
-				f.write('Delete url: ' + data['delete_page'] + '\n')
-			except IOError, e:
-				pass
-			finally:
-				f.close()
-			notification.close()
-		elif proto == 'None':
-			success = True
-		else:
-			success = False
-			data = "Error: no such protocol: {0}".format(proto)
-		if not success:
-			self.show_error(data)
-			return
-		if data:
-			url = data['original_image']
-		else:
-			url = urlparse.urljoin(self.config.get( \
-				'Upload', 'url'), os.path.basename(image))
-		if self.config.get('General', 'shortenurl') and \
-				proto != 'None':
-			url = urllib.urlopen(
-				'http://is.gd/api.php?longurl={0}'
-				.format(url)).readline()
-			print "URL Shortened:", url
-		if self.config.getboolean('General', 'trash'):
-			os.remove(os.path.abspath(image))
-		else:
-			# newimage =
-			try:
-				timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
-				filename = timestamp + '.png'
-				destination = os.path.join(self.config.get('General', 'savedir'), filename)
-				i = 0
-				while os.path.exists(destination):
-					filename = timestamp + '_' + str(i) + '.png'
-					destination = os.path.join(self.config.get('General', 'savedir'), filename)
-				i += 1
-				shutil.move(image, destination)
-				image = destination
-			except IOError:
-				print "Error moving file"
-			
-		clip = gtk.Clipboard()
-		clip.set_text(url)
-		if proto == 'None':
-			self.show_notification('Image Saved', image)
-		else:
-			self.show_notification('Upload Complete', url)
+    def upload_image(self, image):
+        proto = self.config.get('Upload', 'type')
+        data = None
+        if proto == 'SSH':
+            success, data = uploader.upload_file_sftp(image,
+                    self.config.get('Upload', 'hostname'),
+                    int(self.config.get('Upload', 'port')),
+                    self.config.get('Upload', 'username'),
+                    self.config.get('Upload', 'password'),
+                    self.config.get('Upload', 'directory'),
+                    self.config.get('Upload', 'url'),
+                    )
+        elif proto == 'FTP':
+            success, data = uploader.upload_file_ftp(image,
+                    self.config.get('Upload', 'hostname'),
+                    int(self.config.get('Upload', 'port')),
+                    self.config.get('Upload', 'username'),
+                    self.config.get('Upload', 'password'),
+                    self.config.get('Upload', 'directory'),
+                    self.config.get('Upload', 'url'),
+                    )
+        elif proto == 'Imgur':
+            notification = pynotify.Notification('Uploading image', 'Uploading image to Imgur')
+            notification.show()
+            success, data = uploader.upload_file_imgur(image)
+            try:
+                f = open(LOG_FILE, 'ab')
+                f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
+                f.write('Delete url: ' + data['delete_page'] + '\n')
+            except IOError, e:
+                pass
+            finally:
+                f.close()
+            notification.close()
+        elif proto == 'None':
+            success = True
+        else:
+            success = False
+            data = "Error: no such protocol: {0}".format(proto)
+        if not success:
+            self.show_error(data)
+            return
+        if data:
+            url = data['original_image']
+        else:
+            url = urlparse.urljoin(self.config.get( \
+                'Upload', 'url'), os.path.basename(image))
+        if self.config.get('General', 'shortenurl') and proto != 'None':
+            url = urllib.urlopen(
+                'http://is.gd/api.php?longurl={0}'
+                .format(url)).readline()
+            print "URL Shortened:", url
+        if self.config.getboolean('General', 'trash'):
+            os.remove(os.path.abspath(image))
+        else:
+            # newimage =
+            try:
+                timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+                filename = timestamp + '.png'
+                destination = os.path.join(self.config.get('General', 'savedir'), filename)
+                i = 0
+                while os.path.exists(destination):
+                    filename = timestamp + '_' + str(i) + '.png'
+                    destination = os.path.join(self.config.get('General', 'savedir'), filename)
+                    i += 1
+                shutil.move(image, destination)
+                image = destination
+            except IOError:
+                print "Error moving file"
+            
+        clip = gtk.Clipboard()
+        clip.set_text(url)
+        if proto == 'None':
+            self.show_notification('Image Saved', image)
+        else:
+            self.show_notification('Upload Complete', url)
 
-	def show_notification(self, msg_title, msg_body):
-		pynotify.Notification(msg_title, msg_body).show()
+    def show_notification(self, msg_title, msg_body):
+        pynotify.Notification(msg_title, msg_body).show()
 
-        def unbind_all(self):
-                for (key, value) in self.config.items('Hotkeys'):
-                        try:
-                                keybinder.unbind(value)
-                        except KeyError:
-                                pass
+    def unbind_all(self):
+        for (key, value) in self.config.items('Hotkeys'):
+            try:
+                keybinder.unbind(value)
+            except KeyError:
+                pass
 
-        def bind_all(self):
-		keybinder.bind(self.config.get('Hotkeys', 'caparea'), 
-                        self.capture_area)
-		keybinder.bind(self.config.get('Hotkeys', 'capscreen'),
-                        self.capture_screen)
-	
-	def show_pref_dlg(self, widget, data=None):
-                self.unbind_all()
-		p = prefdlg.PrefDlg()
-		p.run(self.config)
-		p.get_result()
-		self.config.write(open(CONF_FILE, 'w'))
-                self.bind_all()
-	
-	def show_about_dlg(self, widget, data=None):
-		aboutdlg.AboutDlg().run()
-	
-	def exit(self, widget, data=None):
-		gtk.main_quit()
-		sys.exit(0)
-	
+    def bind_all(self):
+        keybinder.bind(self.config.get('Hotkeys', 'caparea'), self.capture_area)
+        keybinder.bind(self.config.get('Hotkeys', 'capscreen'), self.capture_screen)
+    
+    def show_pref_dlg(self, widget, data=None):
+        self.unbind_all()
+        p = prefdlg.PrefDlg()
+        p.run(self.config)
+        p.get_result()
+        self.config.write(open(CONF_FILE, 'w'))
+        self.bind_all()
+    
+    def show_about_dlg(self, widget, data=None):
+        aboutdlg.AboutDlg().run()
+    
+    def exit(self, widget, data=None):
+        gtk.main_quit()
+        sys.exit(0)
+    
 if __name__=="__main__":
-	parser = OptionParser()
-	parser.add_option('-v', '--version', action='store_true',
-			  dest="version", default=False,
-			  help='Print version number and exit')
-	(options, args) = parser.parse_args()
-	if options.version:
-		print 'Lookit', common.VERSION_STR
-		sys.exit(0)
-	app = LookitApp()
-	app.run()
-
+    parser = OptionParser()
+    parser.add_option('-v', '--version', action='store_true',
+              dest="version", default=False,
+              help='Print version number and exit')
+    (options, args) = parser.parse_args()
+    if options.version:
+        print 'Lookit', common.VERSION_STR
+        sys.exit(0)
+    app = LookitApp()
+    app.run()
