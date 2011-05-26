@@ -62,7 +62,7 @@ class LookitIndicator:
         elif command == cmd.SHOW_ABOUT:
             pass
         elif command == cmd.EXIT:
-            pass
+            gtk.main_quit()
         else:
             print 'Error: reached end of handle_menu_item'
 
