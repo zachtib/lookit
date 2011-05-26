@@ -1,0 +1,66 @@
+#!/usr/bin/python
+
+# Copyright (c) 2010 by Zach Tibbitts
+#
+# GNU General Public Licence (GPL)
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse
+import gtk
+import sys
+
+try:
+    # Try to import these from current directory, in case running from src
+    import common
+    import lookitindicator
+except ImportError:
+    # Then fall back to globally installed versions
+    from lookit import common
+    from lookit import lookitindicator
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
+    parser.add_argument('--capture-area', action='store_const',
+                        const='CAPTURE_AREA', dest='command',
+                        help='Capture and upload an area of the screen')
+    parser.add_argument('--capture-screen', action='store_const',
+                        const='CAPTURE_SCREEN', dest='command',
+                        help='Capture and upload the entire screen')
+    parser.add_argument('--preferences', action='store_const',
+                        const='SHOW_PREFERENCES', dest='command',
+                        help='Configure Lookit')
+    parser.add_argument('--about', action='store_const',
+                        const='SHOW_ABOUT', dest='command',
+                        help='Show the About Dialog')
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='print version number and exit')
+    args = parser.parse_args()
+
+    if args.version:
+        print 'Lookit', common.VERSION_STR
+        sys.exit(0)
+
+    if args.command == 'CAPTURE_AREA':
+        pass
+    elif args.command == 'CAPTURE_SCREEN':
+        pass
+    elif args.command == 'SHOW_PREFERENCES':
+        pass
+    elif args.command == 'SHOW_ABOUT':
+        pass
+    else:
+        # Start the Lookit interface. For now, this is just an AppIndicator
+        indicator = lookitindicator.LookitIndicator()
+        gtk.main()
+
