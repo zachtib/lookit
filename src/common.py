@@ -1,6 +1,6 @@
 import os
 
-VERSION = (0, 4, 0)
+VERSION = (0, 5, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 
 def str_to_tuple(s):
