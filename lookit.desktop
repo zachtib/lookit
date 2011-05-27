@@ -8,3 +8,24 @@ Icon=lookit
 Terminal=false
 Type=Application
 Categories=Utility;
+X-Ayatana-Desktop-Shortcuts=CaptureArea;CaptureScreen;Preferences;About;
+
+[CaptureArea Shortcut Group]
+Name=Capture Area
+Exec=/usr/bin/lookit --capture-area
+TargetEnvironment=Unity
+
+[CaptureScreen Shortcut Group]
+Name=Capture Screen
+Exec=/usr/bin/lookit --capture-screen
+TargetEnvironment=Unity
+
+[Preferences Shortcut Group]
+Name=Preferences
+Exec=/usr/bin/lookit --preferences
+TargetEnvironment=Unity
+
+[About Shortcut Group]
+Name=About
+Exec=/usr/bin/lookit --about
+TargetEnvironment=Unity
