@@ -22,11 +22,13 @@ import sys
 
 try:
     # Try to import these from current directory, in case running from src
+    import aboutdlg
     import common
     import lookitindicator
     import prefdlg
 except ImportError:
     # Then fall back to globally installed versions
+    from lookit import aboutdlg
     from lookit import common
     from lookit import lookitindicator
     from lookit import prefdlg
@@ -61,7 +63,8 @@ if __name__ == '__main__':
         pd = prefdlg.PrefDlg()
         pd.run()
     elif args.command == 'SHOW_ABOUT':
-        pass
+        ad = aboutdlg.AboutDlg()
+        ad.run()
     else:
         # Start the Lookit interface. For now, this is just an AppIndicator
         indicator = lookitindicator.LookitIndicator()

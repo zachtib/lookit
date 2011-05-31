@@ -33,10 +33,5 @@ class AboutDlg:
     def on_about_dialog_close(self, widget, data=None):
         self.dialog.destroy()
 
-    def on_about_dialog_destroy(self, widget, data=None):
-        if __name__=="__main__":
-            gtk.main_quit()
-
 if __name__=="__main__":
     AboutDlg().run() # For testing purposes only
-    gtk.main()
