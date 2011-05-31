@@ -1,6 +1,9 @@
 import os
 
+XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
+
 CONFIG_FILE = os.path.expanduser('~/.config/lookit.conf')
+LOG_FILE = os.path.join(XDG_CACHE_HOME, 'lookit.log')
 VERSION = (0, 5, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 

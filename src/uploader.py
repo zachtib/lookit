@@ -1,6 +1,11 @@
 import os
 import sys
+import gtk
 import ftplib
+import pynotify
+import tempfile
+import urllib
+import urlparse
 
 PROTO_LIST = ['None']
 
@@ -29,6 +34,9 @@ try:
 	PROTO_LIST.append('Imgur')
 except ImportError:
 	print 'Imgur support not available'
+
+import common
+import lookitconfig
 
 IMGUR_ALLOWED = ['JPEG', 'GIF', 'PNG', 'APNG', 'TIFF', 'BMP', 'PDF', 'XCF']
 
@@ -116,5 +124,97 @@ def upload_file_imgur(f):
 	else:
 		return False, i.mapping.get('error_msg')
 
-def upload_file_ubuntuone(f):
-	pass
+def upload_pixbuf(pb):
+    if pb is not None:
+        ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
+        pb.save_to_callback(ftmp.write, 'png')
+        image = ftmp.name
+    else:
+        return
+
+    config = lookitconfig.LookitConfig()
+    try:
+        config.read(common.CONFIG_FILE)
+    except:
+        print 'An error occurred reading the configuration file'
+
+    proto = config.get('Upload', 'type')
+
+    if proto == 'SSH':
+        success, data = upload_file_sftp(image,
+                    config.get('Upload', 'hostname'),
+                    int(config.get('Upload', 'port')),
+                    config.get('Upload', 'username'),
+                    config.get('Upload', 'password'),
+                    config.get('Upload', 'directory'),
+                    config.get('Upload', 'url'),
+                    )
+    elif proto == 'FTP':
+        success, data = upload_file_ftp(image,
+                    config.get('Upload', 'hostname'),
+                    int(config.get('Upload', 'port')),
+                    config.get('Upload', 'username'),
+                    config.get('Upload', 'password'),
+                    config.get('Upload', 'directory'),
+                    config.get('Upload', 'url'),
+                    )
+    elif proto == 'Imgur':
+        notification = pynotify.Notification('Uploading image', 'Uploading image to Imgur')
+        notification.show()
+        success, data = uploader.upload_file_imgur(image)
+        try:
+            f = open(common.LOG_FILE, 'ab')
+            f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
+            f.write('Delete url: ' + data['delete_page'] + '\n')
+        except IOError, e:
+            pass
+        finally:
+            f.close()
+        notification.close()
+    elif proto == 'None':
+        success = True
+    else:
+        success = False
+        data = "Error: no such protocol: {0}".format(proto)
+
+    if not success:
+        pynotify.Notification('Error', data).show()
+        return
+
+    if data:
+        url = data['original_image']
+    else:
+        url = urlparse.urljoin(config.get('Upload', 'url'),
+            os.path.basename(image))
+
+    if config.getboolean('General', 'shortenurl') and proto != None:
+        url = urllib.urlopen('http://is.gd/api.php?longurl={0}'
+                        .format(url)).readline()
+        print "URL Shortened:", url
+    if config.getboolean('General', 'trash'):
+        os.remove(os.path.abspath(image))
+    else:
+        # newimage =
+        try:
+            timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+            filename = timestamp + '.png'
+            destination = os.path.join(config.get('General', 'savedir'), filename)
+            i = 0
+            while os.path.exists(destination):
+                filename = timestamp + '_' + str(i) + '.png'
+                destination = os.path.join(config.get('General', 'savedir'), filename)
+                i += 1
+            shutil.move(image, destination)
+            image = destination
+        except IOError:
+            print 'Error moving file'
+
+    clipboard = gtk.clipboard_get()
+    clipboard.set_text(url)
+    clipboard.store()
+
+    if proto == 'None':
+        pynotify.Notification('Image Saved', image).show()
+    else:
+        pynotify.Notification('Upload Complete', url).show()
+
