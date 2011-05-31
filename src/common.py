@@ -1,5 +1,6 @@
 import os
 
+CONFIG_FILE = os.path.expanduser('~/.config/lookit.conf')
 VERSION = (0, 5, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 
