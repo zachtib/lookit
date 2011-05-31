@@ -141,7 +141,7 @@ def upload_pixbuf(pb):
     proto = config.get('Upload', 'type')
 
     if proto == 'SSH':
-        pynotify.Notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname'))).show()
+        common.show_notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -151,7 +151,7 @@ def upload_pixbuf(pb):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'FTP':
-        pynotify.Notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname'))).show()
+        common.show_notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -161,8 +161,7 @@ def upload_pixbuf(pb):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Imgur':
-        notification = pynotify.Notification('Uploading image', 'Uploading image to Imgur')
-        notification.show()
+        common.show_notification('Uploading image', 'Uploading image to Imgur')
         success, data = uploader.upload_file_imgur(image)
         try:
             f = open(common.LOG_FILE, 'ab')
@@ -180,7 +179,7 @@ def upload_pixbuf(pb):
         data = "Error: no such protocol: {0}".format(proto)
 
     if not success:
-        pynotify.Notification('Error', data).show()
+        common.show_notification('Error', data)
         return
 
     if data:
@@ -216,7 +215,7 @@ def upload_pixbuf(pb):
     clipboard.store()
 
     if proto == 'None':
-        pynotify.Notification('Image Saved', image).show()
+        common.show_notification('Image Saved', image)
     else:
-        pynotify.Notification('Upload Complete', url).show()
+        common.show_notification('Upload Complete', url)
 

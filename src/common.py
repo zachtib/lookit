@@ -1,4 +1,5 @@
 import os
+import pynotify
 
 XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
 
@@ -19,3 +20,9 @@ def get_data_dir():
     p = os.path.dirname(p)
     p = os.path.join(p, 'data')
     return p
+
+def show_notification(title, message):
+    pynotify.init('Lookit')
+    n = pynotify.Notification(title, message)
+    n.set_hint_string('append', '')
+    n.show()
