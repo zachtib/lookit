@@ -24,10 +24,12 @@ try:
     # Try to import these from current directory, in case running from src
     import common
     import lookitindicator
+    import prefdlg
 except ImportError:
     # Then fall back to globally installed versions
     from lookit import common
     from lookit import lookitindicator
+    from lookit import prefdlg
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
@@ -56,7 +58,8 @@ if __name__ == '__main__':
     elif args.command == 'CAPTURE_SCREEN':
         pass
     elif args.command == 'SHOW_PREFERENCES':
-        pass
+        pd = prefdlg.PrefDlg()
+        pd.run()
     elif args.command == 'SHOW_ABOUT':
         pass
     else:
