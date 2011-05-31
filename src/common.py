@@ -23,6 +23,6 @@ def get_data_dir():
 
 def show_notification(title, message):
     pynotify.init('Lookit')
-    n = pynotify.Notification(title, message)
+    n = pynotify.Notification(title, message, 'lookit')
     n.set_hint_string('append', '')
     n.show()
