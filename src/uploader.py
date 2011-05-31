@@ -141,6 +141,7 @@ def upload_pixbuf(pb):
     proto = config.get('Upload', 'type')
 
     if proto == 'SSH':
+        pynotify.Notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname'))).show()
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -150,6 +151,7 @@ def upload_pixbuf(pb):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'FTP':
+        pynotify.Notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname'))).show()
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
