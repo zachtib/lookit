@@ -178,6 +178,7 @@ def upload_pixbuf(pb):
         notification.close()
     elif proto == 'None':
         success = True
+        data = False
     else:
         success = False
         data = "Error: no such protocol: {0}".format(proto)
@@ -219,7 +220,10 @@ def upload_pixbuf(pb):
     clipboard.store()
 
     if proto == 'None':
-        common.show_notification('Image Saved', image)
+        if config.getboolean('General', 'trash'):
+            common.show_notification('Error', 'No upload type selected')
+        else:
+            common.show_notification('Image Saved', image)
     else:
         common.show_notification('Upload Complete', url)
 
