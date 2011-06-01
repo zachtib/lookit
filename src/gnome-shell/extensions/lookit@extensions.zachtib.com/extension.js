@@ -45,11 +45,11 @@ LookitButton.prototype = {
         this.menu.addMenuItem(this._menuItem)
         
         this._menuItem = new PopupMenu.PopupMenuItem('Preferences');
-        this._menuItem.connect('activate', Lang.bind(this, _captureScreen));
+        this._menuItem.connect('activate', Lang.bind(this, _preferences));
         this.menu.addMenuItem(this._menuItem)
         
         this._menuItem = new PopupMenu.PopupMenuItem('About');
-        this._menuItem.connect('activate', Lang.bind(this, _captureScreen));
+        this._menuItem.connect('activate', Lang.bind(this, _about));
         this.menu.addMenuItem(this._menuItem)
 
         Main.panel._leftBox.insert_actor(this.actor, 1);
