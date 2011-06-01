@@ -36,6 +36,10 @@ LookitButton.prototype = {
         this._menuItem.connect('activate', Lang.bind(this, _captureArea));
         this.menu.addMenuItem(this._menuItem)
         
+        this._menuItem = new PopupMenu.PopupMenuItem('Capture Active Window');
+        this._menuItem.connect('activate', Lang.bind(this, _captureActive));
+        this.menu.addMenuItem(this._menuItem)
+        
         this._menuItem = new PopupMenu.PopupMenuItem('Capture Screen');
         this._menuItem.connect('activate', Lang.bind(this, _captureScreen));
         this.menu.addMenuItem(this._menuItem)
@@ -56,6 +60,10 @@ LookitButton.prototype = {
 
 function _captureArea() {
     GLib.spawn_command_line_async('lookit --capture-area')
+}
+
+function _captureActive() {
+    GLib.spawn_command_line_async('lookit --capture-active-window')
 }
 
 function _captureScreen() {
