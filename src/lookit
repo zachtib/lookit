@@ -18,6 +18,7 @@
 
 import argparse
 import gtk
+import os
 import sys
 
 try:
@@ -39,6 +40,8 @@ except ImportError:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
+    parser.add_argument('image', metavar='IMAGE', nargs='?',
+                        help='An image to upload')
     parser.add_argument('--capture-area', action='store_const',
                         const='CAPTURE_AREA', dest='command',
                         help='Capture and upload an area of the screen')
@@ -57,6 +60,11 @@ if __name__ == '__main__':
 
     if args.version:
         print 'Lookit', common.VERSION_STR
+        sys.exit(0)
+
+    if args.image:
+        if os.path.isfile(args.image):
+            uploader.upload_file(args.image)
         sys.exit(0)
 
     if args.command == 'CAPTURE_AREA':

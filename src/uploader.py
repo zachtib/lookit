@@ -132,10 +132,9 @@ def upload_pixbuf(pb):
         pb.save_to_callback(ftmp.write, 'png')
         ftmp.flush()
         ftmp.close()
-        image = ftmp.name
-    else:
-        return
+        upload_file(ftmp.name)
 
+def upload_file(image):
     config = lookitconfig.LookitConfig()
     try:
         config.read(common.CONFIG_FILE)
