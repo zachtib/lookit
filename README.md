@@ -10,7 +10,7 @@ sudo apt-get install lookit
 ```
 
 ## From source:
-Source tarballs are available on the [Lookit Download page](http://github.com/zachtib/lookit/downloads). Extract the tarball and run (as root):
+Source tarballs are available as Download Tags on the [Lookit Download page](http://github.com/zachtib/lookit/downloads). Extract the tarball and run (as root):
 ```bash
 python setup.py install
 ```
