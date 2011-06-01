@@ -3,7 +3,9 @@ import sys
 import gtk
 import ftplib
 import pynotify
+import shutil
 import tempfile
+import time
 import urllib
 import urlparse
 
@@ -128,6 +130,8 @@ def upload_pixbuf(pb):
     if pb is not None:
         ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
         pb.save_to_callback(ftmp.write, 'png')
+        ftmp.flush()
+        ftmp.close()
         image = ftmp.name
     else:
         return
@@ -162,7 +166,7 @@ def upload_pixbuf(pb):
                     )
     elif proto == 'Imgur':
         common.show_notification('Uploading image', 'Uploading image to Imgur')
-        success, data = uploader.upload_file_imgur(image)
+        success, data = upload_file_imgur(image)
         try:
             f = open(common.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
