@@ -148,6 +148,8 @@ class LookitApp:
         if pb is not None:
             ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
             pb.save_to_callback(ftmp.write, 'png')
+            ftmp.flush()
+            ftmp.close()
             self.upload_image(ftmp.name)
         else:
             self.show_error('Unable to get screenshot')
