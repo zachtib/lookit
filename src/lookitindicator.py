@@ -1,6 +1,11 @@
 import appindicator
 import gtk
 
+import aboutdlg
+import prefdlg
+import screencapper
+import uploader
+
 from common import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_SCREEN', 'SHOW_PREFERENCES',
                 'SHOW_ABOUT', 'EXIT')
@@ -54,13 +59,19 @@ class LookitIndicator:
 
     def handle_menu_item(self, widget=None, command=None):
         if command == cmd.CAPTURE_AREA:
-            pass
+            s = screencapper.ScreenCapper()
+            pb = s.capture_area()
+            uploader.upload_pixbuf(pb)
         elif command == cmd.CAPTURE_SCREEN:
-            pass
+            s = screencapper.ScreenCapper()
+            pb = s.capture_screen()
+            uploader.upload_pixbuf(pb)
         elif command == cmd.SHOW_PREFERENCES:
-            pass
+            pd = prefdlg.PrefDlg()
+            pd.run()
         elif command == cmd.SHOW_ABOUT:
-            pass
+            ad = aboutdlg.AboutDlg()
+            ad.run()
         elif command == cmd.EXIT:
             gtk.main_quit()
         else:
