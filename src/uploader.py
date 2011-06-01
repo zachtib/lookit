@@ -175,7 +175,6 @@ def upload_pixbuf(pb):
             pass
         finally:
             f.close()
-        notification.close()
     elif proto == 'None':
         success = True
         data = False
