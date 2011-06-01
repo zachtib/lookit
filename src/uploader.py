@@ -77,14 +77,14 @@ def get_proto_list():
 	return PROTO_LIST
 
 def upload_file_ftp(f, hostname, port, username, password, directory, url):
-	i = open(f, 'r')
+	i = open(f, 'rb')
 
 	try:
 		ftp = ftplib.FTP()
 		ftp.connect(hostname, port)
 		ftp.login(username, password)
 		ftp.cwd(directory)
-		ftp.storbinary('STOR ' + f, i)
+		ftp.storbinary('STOR ' + os.path.basename(f), i)
 		ftp.quit()
 	except Exception as error:
 		return False, 'Error occured during FTP upload'
