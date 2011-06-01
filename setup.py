@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='lookit',
-      version='0.4.0',
+      version='0.4.1',
       description='Quick Screenshot Uploader',
       author='Zach Tibbitts',
       author_email='zachtib@gmail.com',
