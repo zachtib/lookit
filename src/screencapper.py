@@ -124,6 +124,22 @@ class ScreenCapper:
                           self.size[3])
         return self.pixbuf
 
+    def capture_active_window(self):
+        window = gtk.gdk.screen_get_default().get_active_window()
+        self.size = window.get_geometry()
+        self.origin = window.get_root_origin()
+        # Calculating window decorations offset
+        delta_x = window.get_origin()[0] - window.get_root_origin()[0] 
+        delta_y = window.get_origin()[1] - window.get_root_origin()[1] 
+        size_x = self.size[2] + delta_x
+        size_y = self.size[3] + delta_y
+        self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False,
+                         8, size_x, size_y)
+        self.pixbuf.get_from_drawable(self.root,
+                          self.root.get_colormap(),
+                          self.origin[0], self.origin[1], 0, 0, size_x, size_y)
+        return self.pixbuf
+
     def capture_area(self):
         self.pixbuf = None
         self.result = False

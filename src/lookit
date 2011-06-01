@@ -45,6 +45,9 @@ if __name__ == '__main__':
     parser.add_argument('--capture-area', action='store_const',
                         const='CAPTURE_AREA', dest='command',
                         help='Capture and upload an area of the screen')
+    parser.add_argument('--capture-active-window', action='store_const',
+                        const='CAPTURE_ACTIVE_WINDOW', dest='command',
+                        help='Capture and upload the active window')
     parser.add_argument('--capture-screen', action='store_const',
                         const='CAPTURE_SCREEN', dest='command',
                         help='Capture and upload the entire screen')
@@ -70,6 +73,10 @@ if __name__ == '__main__':
     if args.command == 'CAPTURE_AREA':
         s = screencapper.ScreenCapper()
         pb = s.capture_area()
+        uploader.upload_pixbuf(pb)
+    elif args.command == 'CAPTURE_ACTIVE_WINDOW':
+        s = screencapper.ScreenCapper()
+        pb = s.capture_active_window()
         uploader.upload_pixbuf(pb)
     elif args.command == 'CAPTURE_SCREEN':
         s = screencapper.ScreenCapper()

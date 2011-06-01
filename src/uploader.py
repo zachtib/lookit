@@ -174,7 +174,6 @@ def upload_file(image):
             pass
         finally:
             f.close()
-        notification.close()
     elif proto == 'None':
         success = True
         data = False
