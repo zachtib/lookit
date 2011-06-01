@@ -144,7 +144,7 @@ def upload_file(image):
     proto = config.get('Upload', 'type')
 
     if proto == 'SSH':
-        common.show_notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname')))
+        common.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -154,7 +154,7 @@ def upload_file(image):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'FTP':
-        common.show_notification('Uploading image', 'Uploading image to {0}'.format(config.get('Upload', 'hostname')))
+        common.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -164,7 +164,7 @@ def upload_file(image):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Imgur':
-        common.show_notification('Uploading image', 'Uploading image to Imgur')
+        common.show_notification('Lookit', 'Uploading image to Imgur...')
         success, data = upload_file_imgur(image)
         try:
             f = open(common.LOG_FILE, 'ab')
@@ -182,7 +182,7 @@ def upload_file(image):
         data = "Error: no such protocol: {0}".format(proto)
 
     if not success:
-        common.show_notification('Error', data)
+        common.show_notification('Lookit', 'Error: ' + data)
         return
 
     if data:
@@ -219,9 +219,9 @@ def upload_file(image):
 
     if proto == 'None':
         if config.getboolean('General', 'trash'):
-            common.show_notification('Error', 'No upload type selected')
+            common.show_notification('Lookit', 'Error: No upload type selected')
         else:
-            common.show_notification('Image Saved', image)
+            common.show_notification('Lookit', 'Image saved: ' + image)
     else:
-        common.show_notification('Upload Complete', url)
+        common.show_notification('Lookit', 'Upload complete: ' + url)
 
