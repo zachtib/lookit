@@ -11,6 +11,10 @@ src/lookit
 src/prefdlg.py
 src/screencapper.py
 src/lookitconfig.py
+src/lookitindicator.py
 src/uploader.py
 src/data/about.xml
 src/data/pref.xml
+src/gnome-shell/extensions/lookit@extensions.zachtib.com/extension.js
+src/gnome-shell/extensions/lookit@extensions.zachtib.com/metadata.json
+src/gnome-shell/extensions/lookit@extensions.zachtib.com/stylesheet.css
