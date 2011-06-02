@@ -14,7 +14,7 @@ class LookitIndicator:
 
     def __init__(self):
         self.indicator = appindicator.Indicator(
-            "lookit-indicator",
+            "Lookit",
             "lookit",
             appindicator.CATEGORY_APPLICATION_STATUS)
         self.indicator.set_status(appindicator.STATUS_ACTIVE)
