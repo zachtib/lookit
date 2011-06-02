@@ -173,7 +173,7 @@ def upload_pixbuf(pb):
         ftmp.close()
         upload_file(ftmp.name)
 
-def upload_file(image):
+def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
     try:
         config.read(common.CONFIG_FILE)
@@ -244,23 +244,23 @@ def upload_file(image):
         url = urllib.urlopen('http://is.gd/api.php?longurl={0}'
                         .format(url)).readline()
         print "URL Shortened:", url
-    if config.getboolean('General', 'trash'):
-        os.remove(os.path.abspath(image))
-    else:
-        # newimage =
-        try:
-            timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
-            filename = timestamp + '.png'
-            destination = os.path.join(config.get('General', 'savedir'), filename)
-            i = 0
-            while os.path.exists(destination):
-                filename = timestamp + '_' + str(i) + '.png'
+    if not existing_file:
+        if config.getboolean('General', 'trash'):
+            os.remove(os.path.abspath(image))
+        else:
+            try:
+                timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+                filename = timestamp + '.png'
                 destination = os.path.join(config.get('General', 'savedir'), filename)
-                i += 1
-            shutil.move(image, destination)
-            image = destination
-        except IOError:
-            print 'Error moving file'
+                i = 0
+                while os.path.exists(destination):
+                    filename = timestamp + '_' + str(i) + '.png'
+                    destination = os.path.join(config.get('General', 'savedir'), filename)
+                    i += 1
+                shutil.move(image, destination)
+                image = destination
+            except IOError:
+                print 'Error moving file'
 
     clipboard = gtk.clipboard_get()
     clipboard.set_text(url)
