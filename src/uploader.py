@@ -36,13 +36,22 @@ try:
 	PROTO_LIST.append('Imgur')
 except ImportError:
 	print 'Imgur support not available'
-    
+
 try:
 	import pycurl
 	import re
 	PROTO_LIST.append('Omploader')
 except ImportError:
 	print 'Omploader support not available'
+
+try:
+    import cloud
+    if cloud.POSTER and cloud.ORDERED_DICT:
+        PROTO_LIST.append('CloudApp')
+    else:
+        print 'CloudApp support not available'
+except ImportError:
+    print 'CloudApp support not available'
 
 import common
 import lookitconfig
@@ -53,7 +62,7 @@ class OmploaderUploader:
 	def __init__(self):
 		self.response = ''
 		self.mapping = {}
-		
+
 	def curl_response(self, buf):
 		self.response = self.response + buf
 
@@ -66,10 +75,10 @@ class OmploaderUploader:
 
 		c.perform()
 		c.close()
-        
+
 		m = re.findall("v\w+", self.response)
 		self.mapping['original_image'] = "http://ompldr.org/%s" % m[2]
-        
+
 
 class ImgurUploader:
 	def __init__(self):
@@ -165,6 +174,18 @@ def upload_file_imgur(f):
 	else:
 		return False, i.mapping.get('error_msg')
 
+def upload_file_cloud(f, username, password):
+    if not 'CloudApp' in PROTO_LIST:
+        print 'Error: CloudApp not supported'
+    try:
+        mycloud = cloud.Cloud()
+        mycloud.auth(username, password)
+        result = mycloud.upload_file(f)
+        data = {'original_image': result['url']}
+        return True, data
+    except cloud.CloudException as e:
+        return False, e.message
+
 def upload_pixbuf(pb):
     if pb is not None:
         ftmp = tempfile.NamedTemporaryFile(suffix='.png', prefix='', delete=False)
@@ -203,7 +224,7 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Omploader':
-        common.show_notification('Lookit', 'Uploading image to Omploader')
+        common.show_notification('Lookit', 'Uploading image to Omploader...')
         success, data = upload_file_omploader(image)
         try:
             f = open(common.LOG_FILE, 'ab')
@@ -223,6 +244,11 @@ def upload_file(image, existing_file=False):
             pass
         finally:
             f.close()
+    elif proto == 'CloudApp':
+        common.show_notification('Lookit', 'Uploading image to CloudApp...')
+        success, data = upload_file_cloud(image,
+                    config.get('Upload', 'username'),
+                    config.get('Upload', 'password'))
     elif proto == 'None':
         success = True
         data = False

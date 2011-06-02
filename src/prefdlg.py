@@ -87,6 +87,13 @@ class PrefDlg:
             self.password.set_sensitive(True)
             self.directory.set_sensitive(True)
             self.url.set_sensitive(True)
+        elif proto in ['CloudApp']:
+            self.username.set_sensitive(True)
+            self.password.set_sensitive(True)
+            self.server.set_sensitive(False)
+            self.port.set_sensitive(False)
+            self.directory.set_sensitive(False)
+            self.url.set_sensitive(False)
         else:
             self.server.set_sensitive(False)
             self.port.set_sensitive(False)
