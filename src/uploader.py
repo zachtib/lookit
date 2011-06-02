@@ -203,7 +203,7 @@ def upload_file(image):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Omploader':
-        common.show_notification('Uploading image', 'Uploading image to Omploader')
+        common.show_notification('Lookit', 'Uploading image to Omploader')
         success, data = upload_file_omploader(image)
         try:
             f = open(common.LOG_FILE, 'ab')
