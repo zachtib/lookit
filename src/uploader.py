@@ -4,6 +4,7 @@ import gtk
 import ftplib
 import pynotify
 import shutil
+import socket
 import tempfile
 import time
 import urllib
@@ -142,17 +143,19 @@ def upload_file_ftp(f, hostname, port, username, password, directory, url):
 	return True, None
 
 def upload_file_sftp(f, hostname, port, username, password, directory, url):
-	t = paramiko.Transport((hostname, port))
-	t.connect(username=username, password=password)
-	sftp = paramiko.SFTPClient.from_transport(t)
-	try:
-		sftp.chdir(directory)
-	except IOError:
-		return False, 'Destination directory does not exist'
-
-	sftp.put(f, os.path.basename(f))
-
-	return True, None
+    try:
+        t = paramiko.Transport((hostname, port))
+        t.connect(username=username, password=password)
+        sftp = paramiko.SFTPClient.from_transport(t)
+        sftp.chdir(directory)
+        sftp.put(f, os.path.basename(f))
+    except socket.gaierror:
+        return False, 'Name or service not known'
+    except paramiko.AuthenticationException:
+        return False, 'Authentication failed'
+    except IOError:
+        return False, 'Destination directory does not exist'
+    return True, None
 
 def upload_file_omploader(f):
 	if not 'Omploader' in PROTO_LIST:
