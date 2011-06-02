@@ -36,11 +36,40 @@ try:
 	PROTO_LIST.append('Imgur')
 except ImportError:
 	print 'Imgur support not available'
+    
+try:
+	import pycurl
+	import re
+	PROTO_LIST.append('Omploader')
+except ImportError:
+	print 'Omploader support not available'
 
 import common
 import lookitconfig
 
 IMGUR_ALLOWED = ['JPEG', 'GIF', 'PNG', 'APNG', 'TIFF', 'BMP', 'PDF', 'XCF']
+
+class OmploaderUploader:
+	def __init__(self):
+		self.response = ''
+		self.mapping = {}
+		
+	def curl_response(self, buf):
+		self.response = self.response + buf
+
+	def upload(self, image):
+		c = pycurl.Curl()
+		values = [	('file1', (c.FORM_FILE, image))]
+		c.setopt(c.URL, 'http://ompldr.org/upload')
+		c.setopt(c.HTTPPOST, values)
+		c.setopt(c.WRITEFUNCTION, self.curl_response)
+
+		c.perform()
+		c.close()
+        
+		m = re.findall("v\w+", self.response)
+		self.mapping['original_image'] = "http://ompldr.org/%s" % m[2]
+        
 
 class ImgurUploader:
 	def __init__(self):
@@ -116,6 +145,16 @@ def upload_file_sftp(f, hostname, port, username, password, directory, url):
 
 	return True, None
 
+def upload_file_omploader(f):
+	if not 'Omploader' in PROTO_LIST:
+		print 'Error: Omploader not supported'
+	i = OmploaderUploader()
+	i.upload(f)
+	if not 'error_msg' in i.mapping:
+		return True, i.mapping
+	else:
+		return False, i.mapping.get('error_msg')
+
 def upload_file_imgur(f):
 	if not 'Imgur' in PROTO_LIST:
 		print 'Error: Imgur not supported'
@@ -163,6 +202,16 @@ def upload_file(image):
                     config.get('Upload', 'directory'),
                     config.get('Upload', 'url'),
                     )
+    elif proto == 'Omploader':
+        common.show_notification('Uploading image', 'Uploading image to Omploader')
+        success, data = upload_file_omploader(image)
+        try:
+            f = open(common.LOG_FILE, 'ab')
+            f.write(time.ctime() + ' Uploaded screenshot to Omploader: ' + data['original_image'] + '\n')
+        except IOError, e:
+            pass
+        finally:
+            f.close()
     elif proto == 'Imgur':
         common.show_notification('Lookit', 'Uploading image to Imgur...')
         success, data = upload_file_imgur(image)

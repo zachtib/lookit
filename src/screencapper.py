@@ -1,4 +1,5 @@
 import gtk
+import time
 
 class ScreenCapper:
     def __init__(self):
@@ -115,6 +116,7 @@ class ScreenCapper:
                      width, height)
 
     def capture_screen(self):
+        time.sleep(1)
         self.size = self.root.get_geometry()
         self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False,
                          8, self.size[2], self.size[3])
@@ -125,6 +127,7 @@ class ScreenCapper:
         return self.pixbuf
 
     def capture_active_window(self):
+        time.sleep(1)
         window = gtk.gdk.screen_get_default().get_active_window()
         self.size = window.get_geometry()
         self.origin = window.get_root_origin()
