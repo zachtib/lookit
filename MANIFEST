@@ -13,6 +13,10 @@ src/screencapper.py
 src/lookitconfig.py
 src/lookitindicator.py
 src/uploader.py
+src/cloud.py
+src/poster/streaminghttp.py
+src/poster/encode.py
+src/poster/__init__.py
 src/data/about.xml
 src/data/pref.xml
 src/gnome-shell/extensions/lookit@extensions.zachtib.com/extension.js
