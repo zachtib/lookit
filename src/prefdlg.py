@@ -51,8 +51,9 @@ class PrefDlg:
         self.directory = builder.get_object("directory")
         self.url = builder.get_object("url")
 
-        self.caparea = builder.get_object("caparea")
-        self.capscreen = builder.get_object("capscreen")
+        self.capturearea = builder.get_object("capturearea")
+        self.capturescreen = builder.get_object("capturescreen")
+        self.capturewindow = builder.get_object("capturewindow")
 
         builder.connect_signals(self)
 
@@ -62,8 +63,9 @@ class PrefDlg:
         self.shortenurl.set_active(self.config.getboolean('General', 'shortenurl'))
         self.savedir.set_filename(self.config.get('General', 'savedir'))
         self.autostart.set_active(self.config.getboolean('General', 'autostart'))
-        self.caparea.set_text(self.config.get('Hotkeys', 'caparea'))
-        self.capscreen.set_text(self.config.get('Hotkeys', 'capscreen'))
+        self.capturearea.set_text(self.config.get('Hotkeys', 'capturearea'))
+        self.capturescreen.set_text(self.config.get('Hotkeys', 'capturescreen'))
+        self.capturewindow.set_text(self.config.get('Hotkeys', 'capturewindow'))
         try:
             self.combobox.set_active(CONNECTION_TYPES.index( \
                 self.config.get('Upload', 'type')))
@@ -113,8 +115,9 @@ class PrefDlg:
             self.config.set('General', 'shortenurl', self.shortenurl.get_active())
             self.config.set('General', 'savedir', self.savedir.get_filename())
             self.config.set('General', 'autostart', self.autostart.get_active())
-            self.config.set('Hotkeys', 'caparea', self.caparea.get_text())
-            self.config.set('Hotkeys', 'capscreen', self.capscreen.get_text())
+            self.config.set('Hotkeys', 'capturearea', self.capturearea.get_text())
+            self.config.set('Hotkeys', 'capturescreen', self.capturescreen.get_text())
+            self.config.set('Hotkeys', 'capturewindow', self.capturewindow.get_text())
             self.config.set('Upload', 'type', self.combobox.get_active_text())
             self.config.set('Upload', 'hostname', self.server.get_text())
             self.config.set('Upload', 'port', self.port.get_value_as_int())

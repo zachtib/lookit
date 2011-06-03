@@ -1,7 +1,10 @@
 from ConfigParser import RawConfigParser
+import gconf
 import keyring
 import os
 import subprocess
+
+import common
 
 try:
     PICTURE_DIR = subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
@@ -10,12 +13,25 @@ try:
 except OSError:
     PICTURE_DIR = os.path.expanduser('~')
 
+HOTKEY_NAMES = {'capturearea': 'Lookit: Capture Area',
+                'capturescreen': 'Lookit: Capture Screen',
+                'capturewindow': 'Lookit: Capture Window'}
+HOTKEY_IDENTS = {'capturearea': 'lookit_capture_area',
+                'capturescreen': 'lookit_capture_screen',
+                'capturewindow': 'lookit_capture_window'}
+HOTKEY_ACTIONS = {'capturearea': 'lookit --capture-area',
+                'capturescreen': 'lookit --capture-screen',
+                'capturewindow': 'lookit --capture-window'}
+
+KEYBINDING_DIR = '/desktop/gnome/keybindings/'
+
 class LookitConfig(RawConfigParser):
     def __init__(self):
         RawConfigParser.__init__(self)
         self.load_defaults()
 
     def load_defaults(self):
+        self.ignore_updates = True
         self.add_section('General')
         self.set('General', 'shortenurl', False)
         self.set('General', 'trash', False)
@@ -23,8 +39,9 @@ class LookitConfig(RawConfigParser):
         self.set('General', 'autostart', True)
 
         self.add_section('Hotkeys')
-        self.set('Hotkeys', 'caparea', '<Ctrl><Super>4')
-        self.set('Hotkeys', 'capscreen', '<Ctrl><Super>3')
+        self.set('Hotkeys', 'capturearea', '<Control><Alt>4')
+        self.set('Hotkeys', 'capturescreen', '<Control><Alt>5')
+        self.set('Hotkeys', 'capturewindow', '<Control><Alt>6')
 
         self.add_section('Upload')
         self.set('Upload', 'type', 'None')
@@ -33,7 +50,7 @@ class LookitConfig(RawConfigParser):
         self.set('Upload', 'username', '')
         self.set('Upload', 'directory', '')
         self.set('Upload', 'url', 'http://')
-
+        self.ignore_updates = False
 
     def get(self, section, option):
         if option == 'password':
@@ -46,6 +63,12 @@ class LookitConfig(RawConfigParser):
             return RawConfigParser.get(self, section, option)
 
     def set(self, section, option, value):
+        if section == 'Hotkeys' and not self.ignore_updates:
+            client = gconf.client_get_default()
+            key = HOTKEY_IDENTS[option]
+            client.set_string(KEYBINDING_DIR + key + '/name', HOTKEY_NAMES[option])
+            client.set_string(KEYBINDING_DIR + key + '/action', HOTKEY_ACTIONS[option])
+            client.set_string(KEYBINDING_DIR + key + '/binding', value)
         if option == 'autostart':
             try:
                 if value:
