@@ -9,21 +9,21 @@ Terminal=false
 Type=Application
 Categories=Utility;
 MimeType=image/gif;image/jpeg;image/png;
-X-Ayatana-Desktop-Shortcuts=CaptureArea;CaptureActiveWindow;CaptureScreen;Preferences;About;
+X-Ayatana-Desktop-Shortcuts=CaptureArea;CaptureScreen;CaptureActiveWindow;Preferences;About;
 
 [CaptureArea Shortcut Group]
 Name=Capture Area
 Exec=/usr/bin/lookit --capture-area
 TargetEnvironment=Unity
 
-[CaptureActiveWindow Shortcut Group]
-Name=Capture Active Window
-Exec=/usr/bin/lookit --capture-window
-TargetEnvironment=Unity
-
 [CaptureScreen Shortcut Group]
 Name=Capture Screen
 Exec=/usr/bin/lookit --capture-screen
+TargetEnvironment=Unity
+
+[CaptureActiveWindow Shortcut Group]
+Name=Capture Window
+Exec=/usr/bin/lookit --capture-window
 TargetEnvironment=Unity
 
 [Preferences Shortcut Group]

@@ -36,12 +36,12 @@ LookitButton.prototype = {
         this._menuItem.connect('activate', Lang.bind(this, _captureArea));
         this.menu.addMenuItem(this._menuItem)
         
-        this._menuItem = new PopupMenu.PopupMenuItem('Capture Active Window');
-        this._menuItem.connect('activate', Lang.bind(this, _captureActive));
-        this.menu.addMenuItem(this._menuItem)
-        
         this._menuItem = new PopupMenu.PopupMenuItem('Capture Screen');
         this._menuItem.connect('activate', Lang.bind(this, _captureScreen));
+        this.menu.addMenuItem(this._menuItem)
+        
+        this._menuItem = new PopupMenu.PopupMenuItem('Capture Window');
+        this._menuItem.connect('activate', Lang.bind(this, _captureActive));
         this.menu.addMenuItem(this._menuItem)
         
         this._menuItem = new PopupMenu.PopupMenuItem('Preferences');
