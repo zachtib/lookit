@@ -18,7 +18,7 @@ TargetEnvironment=Unity
 
 [CaptureActiveWindow Shortcut Group]
 Name=Capture Active Window
-Exec=/usr/bin/lookit --capture-active-window
+Exec=/usr/bin/lookit --capture-window
 TargetEnvironment=Unity
 
 [CaptureScreen Shortcut Group]

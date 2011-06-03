@@ -63,7 +63,7 @@ function _captureArea() {
 }
 
 function _captureActive() {
-    GLib.spawn_command_line_async('lookit --capture-active-window')
+    GLib.spawn_command_line_async('lookit --capture-window')
 }
 
 function _captureScreen() {
