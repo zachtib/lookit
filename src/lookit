@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     if args.image:
         if os.path.isfile(args.image):
-            uploader.upload_file(args.image, True)
+            liblookit.upload_file(args.image, True)
         sys.exit(0)
 
     if args.command == 'CAPTURE_AREA':

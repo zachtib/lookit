@@ -33,6 +33,9 @@ def show_notification(title, message):
     n.set_hint_string('append', '')
     n.show()
 
+def upload_file(filename, existing_file=False):
+    uploader.upload_file(filename, existing_file)
+
 def do_capture_area():
     selection = selector.Selector().get_selection()
     if selection is None:
