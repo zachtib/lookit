@@ -52,7 +52,7 @@ LookitButton.prototype = {
         this._menuItem.connect('activate', Lang.bind(this, _about));
         this.menu.addMenuItem(this._menuItem)
 
-        Main.panel._leftBox.insert_actor(this.actor, 1);
+        Main.panel._rightBox.insert_actor(this.actor, 1);
         Main.panel._menus.addMenu(this.menu)
     },
 
