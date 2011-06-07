@@ -20,6 +20,7 @@ import argparse
 import gtk
 import os
 import sys
+import time
 
 try:
     # Try to import these from current directory, in case running from src
@@ -34,6 +35,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
     parser.add_argument('image', metavar='IMAGE', nargs='?',
                         help='An image to upload')
+    parser.add_argument('--delay', metavar='DELAY', action='store',
+                        dest='delay', type=int,
+                        help='Delay before taking screenshot')
     parser.add_argument('--capture-area', action='store_const',
                         const='CAPTURE_AREA', dest='command',
                         help='Capture and upload an area of the screen')
@@ -52,7 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', action='store_true',
                         help='print version number and exit')
     args = parser.parse_args()
-
+    
     if args.version:
         print 'Lookit', liblookit.VERSION_STR
         sys.exit(0)
@@ -61,6 +65,9 @@ if __name__ == '__main__':
         if os.path.isfile(args.image):
             liblookit.upload_file(args.image, True)
         sys.exit(0)
+
+    if args.delay:
+        time.sleep(args.delay)
 
     if args.command == 'CAPTURE_AREA':
         liblookit.do_capture_area()
