@@ -27,16 +27,12 @@ try:
     import liblookit
     import lookitindicator
     import prefdlg
-    import screencapper
-    import uploader
 except ImportError:
     # Then fall back to globally installed versions
     from lookit import aboutdlg
     from lookit import liblookit
     from lookit import lookitindicator
     from lookit import prefdlg
-    from lookit import screencapper
-    from lookit import uploader
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
@@ -71,17 +67,11 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if args.command == 'CAPTURE_AREA':
-        s = screencapper.ScreenCapper()
-        pb = s.capture_area()
-        uploader.upload_pixbuf(pb)
+        liblookit.do_capture_area()
     elif args.command == 'CAPTURE_ACTIVE_WINDOW':
-        s = screencapper.ScreenCapper()
-        pb = s.capture_active_window()
-        uploader.upload_pixbuf(pb)
+        liblookit.do_capture_window()
     elif args.command == 'CAPTURE_SCREEN':
-        s = screencapper.ScreenCapper()
-        pb = s.capture_screen()
-        uploader.upload_pixbuf(pb)
+        liblookit.do_capture_screen()
     elif args.command == 'SHOW_PREFERENCES':
         pd = prefdlg.PrefDlg()
         pd.run()

@@ -1,6 +1,10 @@
 import os
 import pynotify
 
+import screencapper
+import selector
+import uploader
+
 XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
 
 CONFIG_FILE = os.path.expanduser('~/.config/lookit.conf')
@@ -26,3 +30,20 @@ def show_notification(title, message):
     n = pynotify.Notification(title, message, 'lookit')
     n.set_hint_string('append', '')
     n.show()
+
+def do_capture_area():
+    selection = selector.Selector().get_selection()
+    if selection is None:
+        show_notification('Lookit', 'Selection cancelled')
+        return
+    pb = screencapper.ScreenCapper().capture_selection(selection)
+    uploader.upload_pixbuf(pb)
+
+def do_capture_window():
+    pb = screencapper.ScreenCapper().capture_active_window()
+    uploader.upload_pixbuf(pb)
+
+def do_capture_screen():
+    pb = screencapper.ScreenCapper().capture_screen()
+    uploader.upload_pixbuf(pb)
+

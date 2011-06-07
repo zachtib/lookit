@@ -78,13 +78,15 @@ class Selector:
 
     def button_released(self, widget, event):
         self.mouse_down = False
+        self.overlay.hide_all()
         gtk.main_quit()
 
     def motion_notify(self, widget, event):
-        self.dx = event.x - self.x
-        self.dy = event.y - self.y
+        if self.mouse_down:
+            self.dx = event.x - self.x
+            self.dy = event.y - self.y
 
-        self.expose(self.overlay)
+            self.expose(self.overlay)
 
     def key_pressed(self, widget, event):
         if event.keyval == gtk.gdk.keyval_from_name('Escape'):
@@ -92,12 +94,24 @@ class Selector:
         else:
             return False
 
+    def selection_rectangle(self):
+        if self.dx == 0 or self.dy == 0:
+            return None
+        if self.dx < 0:
+            self.x += self.dx
+            self.dx = -self.dx
+        if self.dy < 0:
+            self.y += self.dy
+            self.dy = -self.dy
+        return int(self.x), int(self.y), int(self.dx), int(self.dy)
+
+
     def get_selection(self):
         self.screen_changed(self.overlay)
         if self.supports_alpha:
             self.overlay.show_all()
         gtk.main()
-        return self.x, self.y, self.dx, self.dy
+        return self.selection_rectangle()
 
 if __name__ == '__main__':
     # For testing purposes only

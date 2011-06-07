@@ -3,8 +3,7 @@ import gtk
 
 import aboutdlg
 import prefdlg
-import screencapper
-import uploader
+import liblookit
 
 from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW','CAPTURE_SCREEN', 
@@ -60,17 +59,11 @@ class LookitIndicator:
 
     def handle_menu_item(self, widget=None, command=None):
         if command == cmd.CAPTURE_AREA:
-            s = screencapper.ScreenCapper()
-            pb = s.capture_area()
-            uploader.upload_pixbuf(pb)
+            liblookit.do_capture_area()
         elif command == cmd.CAPTURE_ACTIVE_WINDOW:
-            s = screencapper.ScreenCapper()
-            pb = s.capture_active_window()
-            uploader.upload_pixbuf(pb)
+            liblookit.do_capture_window()
         elif command == cmd.CAPTURE_SCREEN:
-            s = screencapper.ScreenCapper()
-            pb = s.capture_screen()
-            uploader.upload_pixbuf(pb)
+            liblookit.do_capture_screen()
         elif command == cmd.SHOW_PREFERENCES:
             pd = prefdlg.PrefDlg()
             pd.run()

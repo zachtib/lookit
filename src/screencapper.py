@@ -160,3 +160,12 @@ class ScreenCapper:
         gtk.gdk.event_handler_set(gtk.main_do_event)
 
         return self.pixbuf
+
+    def capture_selection(self, rect):
+        self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB,
+                         False, 8, rect[2], rect[3])
+        self.pixbuf.get_from_drawable(self.root,
+                          self.root.get_colormap(),
+                          rect[0], rect[1], 0, 0,
+                          rect[2], rect[3])
+        return self.pixbuf
