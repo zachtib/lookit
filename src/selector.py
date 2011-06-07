@@ -9,6 +9,7 @@ class Selector:
         self.dx = 0
         self.dy = 0
 
+        self.supports_alpha = False
         self.mouse_down = False
 
         self.overlay = gtk.Window(gtk.WINDOW_POPUP)
@@ -31,19 +32,20 @@ class Selector:
         self.overlay.connect('key-press-event',         self.key_pressed)
 
     def expose(self, widget, event=None):
-        cr = widget.window.cairo_create()
+        if self.supports_alpha:
+            cr = widget.window.cairo_create()
+            cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
 
-        cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
+            cr.set_operator(cairo.OPERATOR_SOURCE)
+            cr.paint()
 
-        cr.set_operator(cairo.OPERATOR_SOURCE)
-        cr.paint()
-
-        if self.mouse_down:
-            cr.set_source_rgba(0, 0, 0, 0)
-            cr.rectangle(self.x, self.y, self.dx, self.dy)
-            cr.fill()
-            cr.stroke()
-
+            if self.mouse_down:
+                cr.set_source_rgba(0, 0, 0, 0)
+                cr.rectangle(self.x, self.y, self.dx, self.dy)
+                cr.fill()
+                cr.stroke()
+        else:
+            widget.hide_all()
         return False
 
     def screen_changed(self, widget, old_screen=None):
@@ -52,6 +54,12 @@ class Selector:
         widget.resize(screen.get_width(), screen.get_height())
 
         colormap = screen.get_rgba_colormap()
+        print colormap
+        if colormap == None:
+            colormap = screen.get_rgb_colormap()
+            self.supports_alpha = False
+        else:
+            self.supports_alpha = True
         widget.set_colormap(colormap)
 
         return True
@@ -86,7 +94,8 @@ class Selector:
 
     def get_selection(self):
         self.screen_changed(self.overlay)
-        self.overlay.show_all()
+        if self.supports_alpha:
+            self.overlay.show_all()
         gtk.main()
         return self.x, self.y, self.dx, self.dy
 
