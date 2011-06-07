@@ -1,8 +1,10 @@
 README
-lookit-dark.svg
-lookit-light.svg
 lookit.desktop
 lookit.svg
+icons/ubuntu-mono-light/apps/24/lookit-panel.svg
+icons/ubuntu-mono-light/apps/22/lookit-panel.svg
+icons/ubuntu-mono-dark/apps/24/lookit-panel.svg
+icons/ubuntu-mono-dark/apps/22/lookit-panel.svg
 setup.py
 src/__init__.py
 src/aboutdlg.py
