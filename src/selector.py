@@ -54,7 +54,6 @@ class Selector:
         widget.resize(screen.get_width(), screen.get_height())
 
         colormap = screen.get_rgba_colormap()
-        print colormap
         if colormap == None:
             colormap = screen.get_rgb_colormap()
             self.supports_alpha = False
