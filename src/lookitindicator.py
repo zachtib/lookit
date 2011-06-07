@@ -12,25 +12,9 @@ class LookitIndicator:
     def __init__(self):
         self.indicator = appindicator.Indicator(
             "Lookit",
-            "lookit",
+            "lookit-panel",
             appindicator.CATEGORY_APPLICATION_STATUS)
         self.indicator.set_status(appindicator.STATUS_ACTIVE)
-
-        try:
-            # Check for special Ubuntu themes.
-            # This is an ugly, ugly hack
-            theme = gtk.gdk.screen_get_default().get_setting(
-                            'gtk-icon-theme-name')
-            if theme == 'ubuntu-mono-dark':
-                self.indicator.set_icon('lookit-dark')
-            elif theme == 'ubuntu-mono-light':
-                self.indicator.set_icon('lookit-light')
-            # Oh god, it hurt to even type that, I need to find
-            # a better solution, but it won't see the icons if I
-            # install them manually whhhaaarrgggbbbbllll
-        except ValueError:
-            # Couldn't find the setting, probably not running gnome
-            print "Warning: Couldn't detect gtk theme"
 
         self.menu = gtk.Menu()
         self.add_menu_item('Capture Area', cmd.CAPTURE_AREA)
