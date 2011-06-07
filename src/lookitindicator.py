@@ -6,7 +6,7 @@ import prefdlg
 import screencapper
 import uploader
 
-from common import enum
+from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW','CAPTURE_SCREEN', 
                 'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT')
 

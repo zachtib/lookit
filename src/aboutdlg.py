@@ -2,13 +2,13 @@ import gtk
 import sys
 import os
 
-import common
+import liblookit
 
 class AboutDlg:
     def __init__(self):
         try:
             builder = gtk.Builder()
-            datadir = common.get_data_dir()
+            datadir = liblookit.get_data_dir()
             xmlfile = os.path.join(datadir, 'about.xml')
             builder.add_from_file(xmlfile)
         except:
@@ -21,7 +21,7 @@ class AboutDlg:
 
         builder.connect_signals(self)
 
-        self.dialog.set_version(common.VERSION_STR)
+        self.dialog.set_version(liblookit.VERSION_STR)
 
     def run(self):
         self.dialog.run()

@@ -2,7 +2,7 @@ import gtk
 import os
 import sys
 
-import common
+import liblookit
 import lookitconfig
 import uploader
 
@@ -12,7 +12,7 @@ class PrefDlg:
     def __init__(self):
         try:
             builder = gtk.Builder()
-            datadir = common.get_data_dir()
+            datadir = liblookit.get_data_dir()
             xmlfile = os.path.join(datadir, 'pref.xml')
             builder.add_from_file(xmlfile)
         except Exception as e:
@@ -21,11 +21,11 @@ class PrefDlg:
 
         self.config = lookitconfig.LookitConfig()
         try:
-            self.config.read(common.CONFIG_FILE)
+            self.config.read(liblookit.CONFIG_FILE)
         except:
             print 'An error occurred reading the configuration file'
-        self.config.set('General', 'version', common.VERSION_STR)
-        self.config.write(open(common.CONFIG_FILE, 'w'))
+        self.config.set('General', 'version', liblookit.VERSION_STR)
+        self.config.write(open(liblookit.CONFIG_FILE, 'w'))
 
         self.dialog = builder.get_object("pref_dialog")
 
@@ -125,7 +125,7 @@ class PrefDlg:
             self.config.set('Upload', 'password', self.password.get_text())
             self.config.set('Upload', 'directory', self.directory.get_text())
             self.config.set('Upload', 'url', self.url.get_text())
-            self.config.write(open(common.CONFIG_FILE, 'w'))
+            self.config.write(open(liblookit.CONFIG_FILE, 'w'))
         self.dialog.destroy()
 
 if __name__=="__main__":

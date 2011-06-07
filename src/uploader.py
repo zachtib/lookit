@@ -54,7 +54,7 @@ try:
 except ImportError:
     print 'CloudApp support not available'
 
-import common
+import liblookit
 import lookitconfig
 
 IMGUR_ALLOWED = ['JPEG', 'GIF', 'PNG', 'APNG', 'TIFF', 'BMP', 'PDF', 'XCF']
@@ -200,14 +200,14 @@ def upload_pixbuf(pb):
 def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
     try:
-        config.read(common.CONFIG_FILE)
+        config.read(liblookit.CONFIG_FILE)
     except:
         print 'An error occurred reading the configuration file'
 
     proto = config.get('Upload', 'type')
 
     if proto == 'SSH':
-        common.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
+        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -217,7 +217,7 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'FTP':
-        common.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
+        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -227,20 +227,20 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Omploader':
-        common.show_notification('Lookit', 'Uploading image to Omploader...')
+        liblookit.show_notification('Lookit', 'Uploading image to Omploader...')
         success, data = upload_file_omploader(image)
         try:
-            f = open(common.LOG_FILE, 'ab')
+            f = open(liblookit.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Omploader: ' + data['original_image'] + '\n')
         except IOError, e:
             pass
         finally:
             f.close()
     elif proto == 'Imgur':
-        common.show_notification('Lookit', 'Uploading image to Imgur...')
+        liblookit.show_notification('Lookit', 'Uploading image to Imgur...')
         success, data = upload_file_imgur(image)
         try:
-            f = open(common.LOG_FILE, 'ab')
+            f = open(liblookit.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
             f.write('Delete url: ' + data['delete_page'] + '\n')
         except IOError, e:
@@ -248,7 +248,7 @@ def upload_file(image, existing_file=False):
         finally:
             f.close()
     elif proto == 'CloudApp':
-        common.show_notification('Lookit', 'Uploading image to CloudApp...')
+        liblookit.show_notification('Lookit', 'Uploading image to CloudApp...')
         success, data = upload_file_cloud(image,
                     config.get('Upload', 'username'),
                     config.get('Upload', 'password'))
@@ -260,7 +260,7 @@ def upload_file(image, existing_file=False):
         data = "Error: no such protocol: {0}".format(proto)
 
     if not success:
-        common.show_notification('Lookit', 'Error: ' + data)
+        liblookit.show_notification('Lookit', 'Error: ' + data)
         return
 
     if data:
@@ -297,9 +297,9 @@ def upload_file(image, existing_file=False):
 
     if proto == 'None':
         if config.getboolean('General', 'trash'):
-            common.show_notification('Lookit', 'Error: No upload type selected')
+            liblookit.show_notification('Lookit', 'Error: No upload type selected')
         else:
-            common.show_notification('Lookit', 'Image saved: ' + image)
+            liblookit.show_notification('Lookit', 'Image saved: ' + image)
     else:
-        common.show_notification('Lookit', 'Upload complete: ' + url)
+        liblookit.show_notification('Lookit', 'Upload complete: ' + url)
 

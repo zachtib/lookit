@@ -4,7 +4,7 @@ import keyring
 import os
 import subprocess
 
-import common
+import liblookit
 
 try:
     PICTURE_DIR = subprocess.Popen(['xdg-user-dir', 'PICTURES'], \

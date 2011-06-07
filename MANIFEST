@@ -6,7 +6,7 @@ lookit.svg
 setup.py
 src/__init__.py
 src/aboutdlg.py
-src/common.py
+src/liblookit.py
 src/lookit
 src/prefdlg.py
 src/screencapper.py
