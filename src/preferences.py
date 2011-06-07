@@ -8,7 +8,7 @@ import uploader
 
 CONNECTION_TYPES = uploader.PROTO_LIST
 
-class PrefDlg:
+class PrefDialog:
     def __init__(self):
         try:
             builder = gtk.Builder()
@@ -129,5 +129,5 @@ class PrefDlg:
         self.dialog.destroy()
 
 if __name__=="__main__":
-    p = PrefDlg() # For testing purposes only
+    p = PrefDialog() # For testing purposes only
     p.run()

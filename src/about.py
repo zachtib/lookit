@@ -4,7 +4,7 @@ import os
 
 import liblookit
 
-class AboutDlg:
+class AboutDialog:
     def __init__(self):
         try:
             builder = gtk.Builder()
@@ -34,4 +34,4 @@ class AboutDlg:
         self.dialog.destroy()
 
 if __name__=="__main__":
-    AboutDlg().run() # For testing purposes only
+    AboutDialog().run() # For testing purposes only

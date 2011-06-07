@@ -23,16 +23,12 @@ import sys
 
 try:
     # Try to import these from current directory, in case running from src
-    import aboutdlg
     import liblookit
     import lookitindicator
-    import prefdlg
 except ImportError:
     # Then fall back to globally installed versions
-    from lookit import aboutdlg
     from lookit import liblookit
     from lookit import lookitindicator
-    from lookit import prefdlg
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
@@ -73,11 +69,9 @@ if __name__ == '__main__':
     elif args.command == 'CAPTURE_SCREEN':
         liblookit.do_capture_screen()
     elif args.command == 'SHOW_PREFERENCES':
-        pd = prefdlg.PrefDlg()
-        pd.run()
+        liblookit.do_preferences()
     elif args.command == 'SHOW_ABOUT':
-        ad = aboutdlg.AboutDlg()
-        ad.run()
+        liblookit.do_about()
     else:
         # Start the Lookit interface. For now, this is just an AppIndicator
         indicator = lookitindicator.LookitIndicator()

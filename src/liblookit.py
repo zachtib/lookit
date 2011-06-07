@@ -1,6 +1,8 @@
 import os
 import pynotify
 
+import about
+import preferences
 import screencapper
 import selector
 import uploader
@@ -47,3 +49,8 @@ def do_capture_screen():
     pb = screencapper.ScreenCapper().capture_screen()
     uploader.upload_pixbuf(pb)
 
+def do_preferences():
+    preferences.PrefDialog().run()
+
+def do_about():
+    about.AboutDialog().run()

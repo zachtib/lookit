@@ -1,8 +1,6 @@
 import appindicator
 import gtk
 
-import aboutdlg
-import prefdlg
 import liblookit
 
 from liblookit import enum
@@ -65,11 +63,9 @@ class LookitIndicator:
         elif command == cmd.CAPTURE_SCREEN:
             liblookit.do_capture_screen()
         elif command == cmd.SHOW_PREFERENCES:
-            pd = prefdlg.PrefDlg()
-            pd.run()
+            liblookit.do_preferences()
         elif command == cmd.SHOW_ABOUT:
-            ad = aboutdlg.AboutDlg()
-            ad.run()
+            liblookit.do_about()
         elif command == cmd.EXIT:
             gtk.main_quit()
         else:
