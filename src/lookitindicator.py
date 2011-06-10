@@ -4,8 +4,8 @@ import gtk
 import liblookit
 
 from liblookit import enum
-cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW','CAPTURE_SCREEN', 
-                'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT')
+cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
+                'DELAY_UI', 'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT')
 
 class LookitIndicator:
 
@@ -20,6 +20,7 @@ class LookitIndicator:
         self.add_menu_item('Capture Area', cmd.CAPTURE_AREA)
         self.add_menu_item('Capture Entire Screen', cmd.CAPTURE_SCREEN)
         self.add_menu_item('Capture Active Window', cmd.CAPTURE_ACTIVE_WINDOW)
+        self.add_menu_item('Delay Capture', cmd.DELAY_UI)
         self.add_menu_separator()
         self.add_menu_item('Preferences', cmd.SHOW_PREFERENCES)
         self.add_menu_item('About', cmd.SHOW_ABOUT)
@@ -46,6 +47,8 @@ class LookitIndicator:
             liblookit.do_capture_window()
         elif command == cmd.CAPTURE_SCREEN:
             liblookit.do_capture_screen()
+        elif command == cmd.DELAY_UI:
+            liblookit.do_delay_ui()
         elif command == cmd.SHOW_PREFERENCES:
             liblookit.do_preferences()
         elif command == cmd.SHOW_ABOUT:
