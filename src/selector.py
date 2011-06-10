@@ -58,7 +58,7 @@ class Selector:
             cr.set_operator(cairo.OPERATOR_SOURCE)
 
             if self.mouse_down:
-                cr.set_source_rgba(1.0, 0, 0, 0)
+                cr.set_source_rgb(1.0, 0, 0)
                 cr.rectangle(self.x, self.y, self.dx, self.dy)
                 cr.stroke()
         return False
