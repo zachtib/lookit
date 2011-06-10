@@ -47,6 +47,9 @@ if __name__ == '__main__':
     parser.add_argument('--capture-screen', action='store_const',
                         const='CAPTURE_SCREEN', dest='command',
                         help='Capture and upload the entire screen')
+    parser.add_argument('--delay-ui', action='store_const',
+                        const='DELAY_UI', dest='command',
+                        help='Show the delayed capture dialog')
     parser.add_argument('--preferences', action='store_const',
                         const='SHOW_PREFERENCES', dest='command',
                         help='Configure Lookit')
@@ -75,6 +78,8 @@ if __name__ == '__main__':
         liblookit.do_capture_window()
     elif args.command == 'CAPTURE_SCREEN':
         liblookit.do_capture_screen()
+    elif args.command == 'DELAY_UI':
+        liblookit.do_delay_ui()
     elif args.command == 'SHOW_PREFERENCES':
         liblookit.do_preferences()
     elif args.command == 'SHOW_ABOUT':

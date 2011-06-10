@@ -1,6 +1,7 @@
 YYYY-MM-DD: Lookit 1.1.0
 	* New screen selector for composited desktops
 	* Add a delay option
+	* Move Gnome Shell extension to the right bar
 
 2011-06-03: Lookit 1.0.0
 	* Added Unity quick lists integration

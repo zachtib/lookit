@@ -44,6 +44,10 @@ LookitButton.prototype = {
         this._menuItem.connect('activate', Lang.bind(this, _captureActive));
         this.menu.addMenuItem(this._menuItem)
         
+        this._menuItem = new PopupMenu.PopupMenuItem('Delay Capture');
+        this._menuItem.connect('activate', Lang.bind(this, _captureDelay));
+        this.menu.addMenuItem(this._menuItem)
+        
         this._menuItem = new PopupMenu.PopupMenuItem('Preferences');
         this._menuItem.connect('activate', Lang.bind(this, _preferences));
         this.menu.addMenuItem(this._menuItem)
@@ -68,6 +72,10 @@ function _captureActive() {
 
 function _captureScreen() {
     GLib.spawn_command_line_async('lookit --capture-screen')
+}
+
+function _captureDelay() {
+    GLib.spawn_command_line_async('lookit --delay-ui')
 }
 
 function _preferences() {

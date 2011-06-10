@@ -2,6 +2,7 @@ import os
 import pynotify
 
 import about
+import delay
 import preferences
 import screencapper
 import selector
@@ -51,6 +52,9 @@ def do_capture_window():
 def do_capture_screen():
     pb = screencapper.capture_screen()
     uploader.upload_pixbuf(pb)
+
+def do_delay_ui():
+    delay.DelayDialog().run()
 
 def do_preferences():
     preferences.PrefDialog().run()
