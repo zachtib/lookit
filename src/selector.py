@@ -65,7 +65,7 @@ class Selector:
         screen = widget.get_screen()
         self.is_composited = screen.is_composited()
         if not self.is_composited:
-            self.pixbuf = screencapper.ScreenCapper().capture_screen()
+            self.pixbuf = screencapper.capture_screen()
         widget.move(0, 0)
         widget.resize(screen.get_width(), screen.get_height())
 

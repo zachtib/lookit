@@ -41,15 +41,15 @@ def do_capture_area():
     if selection is None:
         show_notification('Lookit', 'Selection cancelled')
         return
-    pb = screencapper.ScreenCapper().capture_selection(selection)
+    pb = screencapper.capture_selection(selection)
     uploader.upload_pixbuf(pb)
 
 def do_capture_window():
-    pb = screencapper.ScreenCapper().capture_active_window()
+    pb = screencapper.capture_active_window()
     uploader.upload_pixbuf(pb)
 
 def do_capture_screen():
-    pb = screencapper.ScreenCapper().capture_screen()
+    pb = screencapper.capture_screen()
     uploader.upload_pixbuf(pb)
 
 def do_preferences():
