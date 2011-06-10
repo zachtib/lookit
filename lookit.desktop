@@ -9,7 +9,7 @@ Terminal=false
 Type=Application
 Categories=Utility;
 MimeType=image/gif;image/jpeg;image/png;
-X-Ayatana-Desktop-Shortcuts=CaptureArea;CaptureScreen;CaptureActiveWindow;Preferences;About;
+X-Ayatana-Desktop-Shortcuts=CaptureArea;CaptureScreen;CaptureActiveWindow;DelayCapture;Preferences;About;
 
 [CaptureArea Shortcut Group]
 Name=Capture Area
@@ -24,6 +24,11 @@ TargetEnvironment=Unity
 [CaptureActiveWindow Shortcut Group]
 Name=Capture Window
 Exec=/usr/bin/lookit --capture-window
+TargetEnvironment=Unity
+
+[DelayCapture Shortcut Group]
+Name=Delayed Capture
+Exec=/usr/bin/lookit --delay-ui
 TargetEnvironment=Unity
 
 [Preferences Shortcut Group]
