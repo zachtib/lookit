@@ -50,8 +50,10 @@ class Selector:
                 cr.fill()
                 cr.stroke()
         else:
-            cr.set_source_pixbuf(self.pixbuf, 0, 0)
-            cr.paint()
+            if self.pixbuf is None:
+                self.pixbuf = screencapper.capture_screen()
+                cr.set_source_pixbuf(self.pixbuf, 0, 0)
+                cr.paint()
 
             cr.set_operator(cairo.OPERATOR_SOURCE)
 
@@ -61,11 +63,15 @@ class Selector:
                 cr.stroke()
         return False
 
+    def undraw_rect(self, widget):
+        cr = widget.window.cairo_create()
+        cr.set_source_pixbuf(self.pixbuf, 0, 0)
+        cr.rectangle(self.x, self.y, self.dx, self.dy)
+        cr.stroke()
+
     def screen_changed(self, widget, old_screen=None):
         screen = widget.get_screen()
         self.is_composited = screen.is_composited()
-        if not self.is_composited:
-            self.pixbuf = screencapper.capture_screen()
         widget.move(0, 0)
         widget.resize(screen.get_width(), screen.get_height())
 
@@ -101,6 +107,8 @@ class Selector:
 
     def motion_notify(self, widget, event):
         if self.mouse_down:
+            if not self.is_composited:
+                self.undraw_rect(widget)
             self.dx = event.x - self.x
             self.dy = event.y - self.y
 
