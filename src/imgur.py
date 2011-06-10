@@ -1,6 +1,8 @@
 import pycurl
 import xml.parsers.expat
 
+IMGUR_ALLOWED = ['JPEG', 'GIF', 'PNG', 'APNG', 'TIFF', 'BMP', 'PDF', 'XCF']
+
 class ImgurUploader:
     def __init__(self):
         self.response = ''
