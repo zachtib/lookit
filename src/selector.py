@@ -88,12 +88,9 @@ class Selector:
 
     def realize(self, widget):
         widget.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.CROSS))
-        gtk.gdk.keyboard_grab(widget.window)
 
     def on_show(self, widget):
         gtk.gdk.keyboard_grab(widget.window)
-        if not self.is_composited:
-            pass
 
     def button_pressed(self, widget, event):
         self.mouse_down = True
