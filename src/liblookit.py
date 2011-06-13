@@ -1,8 +1,10 @@
 import os
 import pynotify
+import time
 
 import about
 import delay
+import lookitconfig
 import preferences
 import screencapper
 import selector
@@ -37,7 +39,13 @@ def show_notification(title, message):
 def upload_file(filename, existing_file=False):
     uploader.upload_file(filename, existing_file)
 
+def handle_delay():
+    delay_value = int(lookitconfig.quickget('General', 'delay'))
+    print delay_value
+    time.sleep(delay_value)
+
 def do_capture_area():
+    handle_delay()
     selection = selector.Selector().get_selection()
     if selection is None:
         show_notification('Lookit', 'Selection cancelled')
@@ -46,10 +54,12 @@ def do_capture_area():
     uploader.upload_pixbuf(pb)
 
 def do_capture_window():
+    handle_delay()
     pb = screencapper.capture_active_window()
     uploader.upload_pixbuf(pb)
 
 def do_capture_screen():
+    handle_delay()
     pb = screencapper.capture_screen()
     uploader.upload_pixbuf(pb)
 

@@ -110,6 +110,11 @@ class LookitConfig(RawConfigParser):
             else:
                 return bool(value)
 
+def quickget(section, option):
+    c = LookitConfig()
+    c.read(liblookit.CONFIG_FILE)
+    return c.get(section, option)
+
 if __name__ == '__main__':
     lc = LookitConfig()
     lc.load_defaults()
