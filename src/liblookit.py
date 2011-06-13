@@ -3,7 +3,6 @@ import pynotify
 import time
 
 import about
-import delay
 import lookitconfig
 import preferences
 import screencapper
@@ -62,9 +61,6 @@ def do_capture_screen():
     handle_delay()
     pb = screencapper.capture_screen()
     uploader.upload_pixbuf(pb)
-
-def do_delay_ui():
-    delay.DelayDialog().run()
 
 def do_preferences():
     preferences.PrefDialog().run()

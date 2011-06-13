@@ -33,6 +33,7 @@ class PrefDialog:
         self.shortenurl = builder.get_object("shortenurl")
         self.savedir = builder.get_object("savedir")
         self.autostart = builder.get_object("autostart")
+        self.delayscale = builder.get_object("delayscale")
 
         self.combobox = builder.get_object("combobox")
         connections = gtk.ListStore(str)
@@ -63,6 +64,7 @@ class PrefDialog:
         self.shortenurl.set_active(self.config.getboolean('General', 'shortenurl'))
         self.savedir.set_filename(self.config.get('General', 'savedir'))
         self.autostart.set_active(self.config.getboolean('General', 'autostart'))
+        self.delayscale.set_value(self.config.getint('General', 'delay'))
         self.capturearea.set_text(self.config.get('Hotkeys', 'capturearea'))
         self.capturescreen.set_text(self.config.get('Hotkeys', 'capturescreen'))
         self.capturewindow.set_text(self.config.get('Hotkeys', 'capturewindow'))
@@ -115,6 +117,7 @@ class PrefDialog:
             self.config.set('General', 'shortenurl', self.shortenurl.get_active())
             self.config.set('General', 'savedir', self.savedir.get_filename())
             self.config.set('General', 'autostart', self.autostart.get_active())
+            self.config.set('General', 'delay', int(self.delayscale.get_value()))
             self.config.set('Hotkeys', 'capturearea', self.capturearea.get_text())
             self.config.set('Hotkeys', 'capturescreen', self.capturescreen.get_text())
             self.config.set('Hotkeys', 'capturewindow', self.capturewindow.get_text())
