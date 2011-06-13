@@ -128,6 +128,12 @@ class PrefDialog:
             self.config.write(open(liblookit.CONFIG_FILE, 'w'))
         self.dialog.destroy()
 
+    def on_pref_dialog_destroy(self, widget, data=None):
+        pass
+
+    def on_pref_dialog_close(self, widget, data=None):
+        pass
+
 if __name__=="__main__":
     p = PrefDialog() # For testing purposes only
     p.run()
