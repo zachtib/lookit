@@ -2,6 +2,7 @@ import appindicator
 import gtk
 
 import liblookit
+import widgets
 
 from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
@@ -20,7 +21,7 @@ class LookitIndicator:
         self.add_menu_item('Capture Area', cmd.CAPTURE_AREA)
         self.add_menu_item('Capture Entire Screen', cmd.CAPTURE_SCREEN)
         self.add_menu_item('Capture Active Window', cmd.CAPTURE_ACTIVE_WINDOW)
-        self.add_menu_item('Delay Capture', cmd.DELAY_UI)
+        self.add_menu_item('Adjust Delay', cmd.DELAY_UI)
         self.add_menu_separator()
         self.add_menu_item('Preferences', cmd.SHOW_PREFERENCES)
         self.add_menu_item('About', cmd.SHOW_ABOUT)

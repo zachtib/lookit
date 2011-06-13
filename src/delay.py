@@ -4,9 +4,16 @@ import time
 import os
 
 import liblookit
+import lookitconfig
 
 class DelayDialog:
     def __init__(self):
+        self.config = lookitconfig.LookitConfig()
+        try:
+            self.config.read(liblookit.CONFIG_FILE)
+        except:
+            pass
+
         try:
             self.builder = gtk.Builder()
             datadir = liblookit.get_data_dir()
@@ -19,6 +26,8 @@ class DelayDialog:
         self.dialog = self.builder.get_object('dialog')
         self.dialog.connect('response', self.on_response)
 
+        self.builder.get_object('hscale').set_value(self.config.getint('General', 'delay'))
+
     def run(self):
         self.dialog.run()
 
@@ -26,14 +35,10 @@ class DelayDialog:
         self.dialog.hide_all()
         if data != 0:
             return
-        delay_value = self.builder.get_object('spinbutton').get_value()
-        time.sleep(delay_value)
-        if self.builder.get_object('radiobutton_area').get_active():
-            liblookit.do_capture_area()
-        elif self.builder.get_object('radiobutton_screen').get_active():
-            liblookit.do_capture_screen()
-        elif self.builder.get_object('radiobutton_window').get_active():
-            liblookit.do_capture_window()
+        delay_value = int(self.builder.get_object('hscale').get_value())
+        print delay_value
+        self.config.set('General', 'delay', delay_value)
+        self.config.write(open(liblookit.CONFIG_FILE, 'w'))
 
 if __name__ == '__main__':
     DelayDialog().run()

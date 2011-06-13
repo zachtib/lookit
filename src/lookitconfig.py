@@ -37,6 +37,7 @@ class LookitConfig(RawConfigParser):
         self.set('General', 'trash', False)
         self.set('General', 'savedir', PICTURE_DIR)
         self.set('General', 'autostart', True)
+        self.set('General', 'delay', 0)
 
         self.add_section('Hotkeys')
         self.set('Hotkeys', 'capturearea', '<Control><Alt>4')
