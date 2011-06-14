@@ -30,7 +30,7 @@ class PreferencesDialog:
         try:
             self.builder = gtk.Builder()
             datadir = liblookit.get_data_dir()
-            xmlfile = os.path.join(datadir, 'pref.xml')
+            xmlfile = os.path.join(datadir, 'preferences.xml')
             self.builder.add_from_file(xmlfile)
         except Exception as e:
             print e
