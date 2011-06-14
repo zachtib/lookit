@@ -38,7 +38,7 @@ class Selector:
 
     def expose(self, widget, event=None):
         cr = widget.window.cairo_create()
-        if self.is_composited and self.supports_alpha:
+        if self.is_composited and self.supports_alpha and not self.ffb:
             cr.set_operator(cairo.OPERATOR_SOURCE)
             cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
             cr.paint()
@@ -101,7 +101,7 @@ class Selector:
 
     def motion_notify(self, widget, event):
         if self.mouse_down:
-            if not self.is_composited:
+            if not self.is_composited or self.ffb:
                 self.undraw_rect(widget)
             self.dx = event.x - self.x
             self.dy = event.y - self.y
@@ -126,7 +126,8 @@ class Selector:
         return int(self.x), int(self.y), int(self.dx), int(self.dy)
 
 
-    def get_selection(self):
+    def get_selection(self, ffb=False):
+        self.ffb = ffb
         self.screen_changed(self.overlay)
         self.overlay.show_all()
         gtk.main()

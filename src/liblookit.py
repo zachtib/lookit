@@ -55,7 +55,8 @@ def handle_delay():
 
 def do_capture_area():
     handle_delay()
-    selection = selector.Selector().get_selection()
+    ffb = lookitconfig.LookitConfig().getboolean('General', 'force_fallback')
+    selection = selector.Selector().get_selection(ffb)
     if selection is None:
         show_notification('Lookit', 'Selection cancelled')
         return
