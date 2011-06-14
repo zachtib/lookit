@@ -4,6 +4,7 @@ YYYY-MM-DD: Lookit 1.1.0
 	* Add a --delay option
 	* Move Gnome Shell extension to the right bar
 	* Overhaul LookitConfig. Same functionality, but cleaner code
+	* Rewrite the code for the preferences dialog to be cleaner
 
 2011-06-03: Lookit 1.0.0
 	* Added Unity quick lists integration
