@@ -2,7 +2,6 @@ import appindicator
 import gtk
 
 import liblookit
-import widgets
 
 from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
