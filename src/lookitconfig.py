@@ -115,6 +115,12 @@ def quickget(section, option):
     c.read(liblookit.CONFIG_FILE)
     return c.get(section, option)
 
+def quickset(section, option, value):
+    c = LookitConfig()
+    c.read(liblookit.CONFIG_FILE)
+    c.set(section, option, value)
+    c.write(open(liblookit.CONFIG_FILE, 'w'))
+
 if __name__ == '__main__':
     lc = LookitConfig()
     lc.load_defaults()
