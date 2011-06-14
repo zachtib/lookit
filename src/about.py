@@ -16,18 +16,14 @@ class AboutDialog:
             sys.exit(1)
 
         self.dialog = builder.get_object("about_dialog")
-
         self.dialog.connect("response", self.on_about_dialog_close)
-
         builder.connect_signals(self)
-
         self.dialog.set_version(liblookit.VERSION_STR)
 
     def run(self):
         self.dialog.run()
 
     def on_about_dialog_response(self, widget, data=None):
-        print "Response"
         self.dialog.destroy()
 
     def on_about_dialog_close(self, widget, data=None):
