@@ -45,10 +45,9 @@ class Selector:
             cr.paint()
 
             if self.mouse_down:
-                cr.set_source_rgba(0, 0, 0, 0)
+                cr.set_operator(cairo.OPERATOR_CLEAR)
                 cr.rectangle(self.x, self.y, self.dx, self.dy)
                 cr.fill()
-                cr.stroke()
         else:
             if self.pixbuf is None:
                 self.pixbuf = screencapper.capture_screen()
