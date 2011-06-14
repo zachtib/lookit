@@ -39,9 +39,8 @@ class Selector:
     def expose(self, widget, event=None):
         cr = widget.window.cairo_create()
         if self.is_composited and self.supports_alpha:
-            cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
-
             cr.set_operator(cairo.OPERATOR_SOURCE)
+            cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
             cr.paint()
 
             if self.mouse_down:
@@ -49,12 +48,11 @@ class Selector:
                 cr.rectangle(self.x, self.y, self.dx, self.dy)
                 cr.fill()
         else:
+            cr.set_operator(cairo.OPERATOR_SOURCE)
             if self.pixbuf is None:
                 self.pixbuf = screencapper.capture_screen()
                 cr.set_source_pixbuf(self.pixbuf, 0, 0)
                 cr.paint()
-
-            cr.set_operator(cairo.OPERATOR_SOURCE)
 
             if self.mouse_down:
                 cr.set_source_rgb(1.0, 0, 0)
