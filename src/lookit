@@ -56,7 +56,9 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', action='store_true',
                         help='print version number and exit')
     args = parser.parse_args()
-    
+
+    liblookit.migrate_from_1_0()
+
     if args.version:
         print 'Lookit', liblookit.VERSION_STR
         sys.exit(0)

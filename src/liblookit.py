@@ -38,6 +38,14 @@ def show_notification(title, message):
     n.set_hint_string('append', '')
     n.show()
 
+def migrate_from_1_0():
+    old_config = os.path.expanduser('~/.config/lookit.conf')
+    if os.path.isfile(old_config):
+        config = lookitconfig.LookitConfig(old_config)
+        config.filename = lookitconfig.CONFIG_FILE
+        config.save()
+        os.remove(old_config)
+
 def upload_file(filename, existing_file=False):
     uploader.upload_file(filename, existing_file)
 
