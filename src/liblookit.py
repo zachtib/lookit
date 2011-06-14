@@ -9,10 +9,13 @@ import screencapper
 import selector
 import uploader
 
+from xdg import BaseDirectory
+
 XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
 
-CONFIG_FILE = os.path.expanduser('~/.config/lookit.conf')
-LOG_FILE = os.path.join(XDG_CACHE_HOME, 'lookit.log')
+CONFIG_DIR = BaseDirectory.save_config_path('lookit')
+LOG_FILE = os.path.join(CONFIG_DIR, 'log')
+
 VERSION = (1, 1, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 

@@ -6,8 +6,6 @@ import subprocess
 
 from xdg import BaseDirectory
 
-import liblookit
-
 CONFIG_DIR = BaseDirectory.save_config_path('lookit')
 CONFIG_FILE = os.path.join(CONFIG_DIR, 'config')
 
