@@ -20,12 +20,8 @@ class PrefDialog:
             sys.exit(1)
 
         self.config = lookitconfig.LookitConfig()
-        try:
-            self.config.read(liblookit.CONFIG_FILE)
-        except:
-            print 'An error occurred reading the configuration file'
         self.config.set('General', 'version', liblookit.VERSION_STR)
-        self.config.write(open(liblookit.CONFIG_FILE, 'w'))
+        self.config.save()
 
         self.dialog = builder.get_object("pref_dialog")
 
@@ -128,7 +124,7 @@ class PrefDialog:
             self.config.set('Upload', 'password', self.password.get_text())
             self.config.set('Upload', 'directory', self.directory.get_text())
             self.config.set('Upload', 'url', self.url.get_text())
-            self.config.write(open(liblookit.CONFIG_FILE, 'w'))
+            self.config.save()
         self.dialog.destroy()
 
     def on_pref_dialog_destroy(self, widget, data=None):

@@ -1,10 +1,15 @@
-from ConfigParser import RawConfigParser
+from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 import gconf
 import keyring
 import os
 import subprocess
 
+from xdg import BaseDirectory
+
 import liblookit
+
+CONFIG_DIR = BaseDirectory.save_config_path('lookit')
+CONFIG_FILE = os.path.join(CONFIG_DIR, 'config')
 
 try:
     PICTURE_DIR = subprocess.Popen(['xdg-user-dir', 'PICTURES'], \
@@ -25,33 +30,27 @@ HOTKEY_ACTIONS = {'capturearea': 'lookit --capture-area',
 
 KEYBINDING_DIR = '/desktop/gnome/keybindings/'
 
+DEFAULTS = {'General': {'shortenurl': False,
+                        'trash': False,
+                        'savedir': PICTURE_DIR,
+                        'autostart': False,
+                        'delay': 0},
+            'Hotkeys': {'capturearea': '<Control><Alt>4',
+                        'capturescreen': '<Control><Alt>5',
+                        'capturewindow': '<Control><Alt>6'},
+            'Upload':  {'type': 'None',
+                        'hostname': '',
+                        'port': 0,
+                        'username': '',
+                        'directory': '',
+                        'url': 'http://'}
+}
+
 class LookitConfig(RawConfigParser):
-    def __init__(self):
+    def __init__(self, filename=CONFIG_FILE):
         RawConfigParser.__init__(self)
-        self.load_defaults()
-
-    def load_defaults(self):
-        self.ignore_updates = True
-        self.add_section('General')
-        self.set('General', 'shortenurl', False)
-        self.set('General', 'trash', False)
-        self.set('General', 'savedir', PICTURE_DIR)
-        self.set('General', 'autostart', True)
-        self.set('General', 'delay', 0)
-
-        self.add_section('Hotkeys')
-        self.set('Hotkeys', 'capturearea', '<Control><Alt>4')
-        self.set('Hotkeys', 'capturescreen', '<Control><Alt>5')
-        self.set('Hotkeys', 'capturewindow', '<Control><Alt>6')
-
-        self.add_section('Upload')
-        self.set('Upload', 'type', 'None')
-        self.set('Upload', 'hostname', '')
-        self.set('Upload', 'port', 0)
-        self.set('Upload', 'username', '')
-        self.set('Upload', 'directory', '')
-        self.set('Upload', 'url', 'http://')
-        self.ignore_updates = False
+        self.filename = filename
+        self.load(self.filename)
 
     def get(self, section, option):
         if option == 'password':
@@ -61,10 +60,15 @@ class LookitConfig(RawConfigParser):
             else:
                 return password
         else:
-            return RawConfigParser.get(self, section, option)
+            try:
+                return RawConfigParser.get(self, section, option)
+            except (NoSectionError, NoOptionError):
+                return DEFAULTS[section][option]
 
     def set(self, section, option, value):
-        if section == 'Hotkeys' and not self.ignore_updates:
+        if not section in self.sections():
+            self.add_section(section)
+        if section == 'Hotkeys':
             client = gconf.client_get_default()
             key = HOTKEY_IDENTS[option]
             client.set_string(KEYBINDING_DIR + key + '/name', HOTKEY_NAMES[option])
@@ -110,16 +114,23 @@ class LookitConfig(RawConfigParser):
             else:
                 return bool(value)
 
+    def load(self):
+        self.read(self.filename)
+
+    def save(self):
+        f = open(self.filename, 'w')
+        self.write(f)
+        f.flush()
+        f.close()
+
 def quickget(section, option):
     c = LookitConfig()
-    c.read(liblookit.CONFIG_FILE)
     return c.get(section, option)
 
 def quickset(section, option, value):
     c = LookitConfig()
-    c.read(liblookit.CONFIG_FILE)
     c.set(section, option, value)
-    c.write(open(liblookit.CONFIG_FILE, 'w'))
+    c.save()
 
 if __name__ == '__main__':
     lc = LookitConfig()

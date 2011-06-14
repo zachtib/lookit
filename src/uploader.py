@@ -154,10 +154,6 @@ def upload_pixbuf(pb):
 
 def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
-    try:
-        config.read(liblookit.CONFIG_FILE)
-    except:
-        print 'An error occurred reading the configuration file'
 
     proto = config.get('Upload', 'type')
 
