@@ -12,7 +12,7 @@
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
   </object>
-  <object class="GtkDialog" id="pref_dialog">
+  <object class="GtkDialog" id="dialog">
     <property name="width_request">400</property>
     <property name="height_request">360</property>
     <property name="can_focus">False</property>
@@ -21,9 +21,7 @@
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
-    <signal name="destroy" handler="on_pref_dialog_destroy" swapped="no"/>
-    <signal name="close" handler="on_pref_dialog_close" swapped="no"/>
-    <signal name="response" handler="on_pref_dialog_response" swapped="no"/>
+    <signal name="response" handler="on_dialog_response" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>

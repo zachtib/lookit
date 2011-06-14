@@ -4,138 +4,115 @@ import sys
 
 import liblookit
 import lookitconfig
-import uploader
 
-CONNECTION_TYPES = uploader.PROTO_LIST
+from uploader import PROTO_LIST as CONNECTION_TYPES
 
-class PrefDialog:
+WIDGETS = ( (bool, 'trash', 'General', 'trash'),
+            (bool, 'shortenurl', 'General', 'shortenurl'),
+            (bool, 'autostart', 'General', 'autostart'),
+            (bool, 'force_fallback', 'General', 'force_fallback'),
+            (int, 'delayscale', 'General', 'delay'),
+            (file, 'savedir', 'General', 'savedir'),
+            (str, 'capturearea', 'Hotkeys', 'capturearea'),
+            (str, 'capturescreen', 'Hotkeys', 'capturescreen'),
+            (str, 'capturewindow', 'Hotkeys', 'capturewindow'),
+            (str, 'server', 'Upload', 'hostname'),
+            (str, 'username', 'Upload', 'username'),
+            (str, 'password', 'Upload', 'password'),
+            (int, 'port', 'Upload', 'port'),
+            (str, 'directory', 'Upload', 'directory'),
+            (str, 'url', 'Upload', 'url'),
+            (None, 'combobox', 'Upload', 'type'),
+)
+
+class PreferencesDialog:
     def __init__(self):
         try:
-            builder = gtk.Builder()
+            self.builder = gtk.Builder()
             datadir = liblookit.get_data_dir()
             xmlfile = os.path.join(datadir, 'pref.xml')
-            builder.add_from_file(xmlfile)
+            self.builder.add_from_file(xmlfile)
         except Exception as e:
             print e
             sys.exit(1)
 
-        self.config = lookitconfig.LookitConfig()
-        self.config.set('General', 'version', liblookit.VERSION_STR)
-        self.config.save()
-
-        self.dialog = builder.get_object("pref_dialog")
-
-        self.trash = builder.get_object("trash")
-        self.shortenurl = builder.get_object("shortenurl")
-        self.savedir = builder.get_object("savedir")
-        self.autostart = builder.get_object("autostart")
-        self.delayscale = builder.get_object("delayscale")
-        self.force_fallback = builder.get_object("force_fallback")
-
-        self.combobox = builder.get_object("combobox")
         connections = gtk.ListStore(str)
         for connection in CONNECTION_TYPES:
             connections.append([connection])
-        self.combobox.set_model(connections)
         cell = gtk.CellRendererText()
-        self.combobox.pack_start(cell)
-        self.combobox.add_attribute(cell, 'text', 0)
-        self.combobox.set_active(0)
+        combobox = self.builder.get_object('combobox')
+        combobox.set_model(connections)
+        combobox.pack_start(cell)
+        combobox.add_attribute(cell, 'text', 0)
+        combobox.set_active(0)
 
-        self.server = builder.get_object("server")
-        self.port = builder.get_object("port")
-        self.username = builder.get_object("username")
-        self.password = builder.get_object("password")
-        self.directory = builder.get_object("directory")
-        self.url = builder.get_object("url")
-
-        self.capturearea = builder.get_object("capturearea")
-        self.capturescreen = builder.get_object("capturescreen")
-        self.capturewindow = builder.get_object("capturewindow")
-
-        builder.connect_signals(self)
+        self.config = lookitconfig.LookitConfig()
+        self.builder.connect_signals(self)
 
     def run(self):
-        self.combobox.set_active(CONNECTION_TYPES.index('None'))
-        self.trash.set_active(self.config.getboolean('General', 'trash'))
-        self.shortenurl.set_active(self.config.getboolean('General', 'shortenurl'))
-        self.savedir.set_filename(self.config.get('General', 'savedir'))
-        self.autostart.set_active(self.config.getboolean('General', 'autostart'))
-        self.delayscale.set_value(self.config.getint('General', 'delay'))
-        self.force_fallback.set_active(self.config.getboolean('General', 'force_fallback'))
-        self.capturearea.set_text(self.config.get('Hotkeys', 'capturearea'))
-        self.capturescreen.set_text(self.config.get('Hotkeys', 'capturescreen'))
-        self.capturewindow.set_text(self.config.get('Hotkeys', 'capturewindow'))
-        try:
-            self.combobox.set_active(CONNECTION_TYPES.index( \
-                self.config.get('Upload', 'type')))
-        except:
-            pass
-        self.server.set_text(self.config.get('Upload', 'hostname'))
-        self.port.get_adjustment().set_value(self.config.getint('Upload', 'port'))
-        self.username.set_text(self.config.get('Upload', 'username'))
-        self.password.set_text(self.config.get('Upload', 'password'))
-        self.directory.set_text(self.config.get('Upload', 'directory'))
-        self.url.set_text(self.config.get('Upload', 'url'))
+        for (kind, name, section, option) in WIDGETS:
+            widget = self.builder.get_object(name)
+            if kind == bool:
+                value = self.config.getboolean(section, option)
+                widget.set_active(value)
+            elif kind == int:
+                value = self.config.getint(section, option)
+                widget.set_value(value)
+            elif kind == str:
+                value = self.config.get(section, option)
+                widget.set_text(value)
+            elif kind == file:
+                value = self.config.get(section, option)
+                widget.set_filename(value)
+            elif kind == None:
+                value = self.config.get(section, option)
+                widget.set_active(CONNECTION_TYPES.index(value))
 
-        self.dialog.run()
+        self.builder.get_object('dialog').run()
 
     def on_proto_changed(self, widget, data=None):
         proto = widget.get_active_text()
+
+        user_pass = ('username', 'password')
+        server_port_dir_url = ('server', 'port', 'directory', 'url')
+        all_fields = user_pass + server_port_dir_url
+
         if proto in ['FTP', 'SSH']:
-            self.server.set_sensitive(True)
-            self.port.set_sensitive(True)
-            self.username.set_sensitive(True)
-            self.password.set_sensitive(True)
-            self.directory.set_sensitive(True)
-            self.url.set_sensitive(True)
+            for field in all_fields:
+                self.builder.get_object(field).set_sensitive(True)
         elif proto in ['CloudApp']:
-            self.username.set_sensitive(True)
-            self.password.set_sensitive(True)
-            self.server.set_sensitive(False)
-            self.port.set_sensitive(False)
-            self.directory.set_sensitive(False)
-            self.url.set_sensitive(False)
+            for field in user_pass:
+                self.builder.get_object(field).set_sensitive(True)
+            for field in server_port_dir_url:
+                self.builder.get_object(field).set_sensitive(False)
         else:
-            self.server.set_sensitive(False)
-            self.port.set_sensitive(False)
-            self.username.set_sensitive(False)
-            self.password.set_sensitive(False)
-            self.directory.set_sensitive(False)
-            self.url.set_sensitive(False)
+            for field in all_fields:
+                self.builder.get_object(field).set_sensitive(False)
 
         if proto == 'FTP':
-            self.port.get_adjustment().set_value(21)
+            self.builder.get_object('port').set_value(21)
         elif proto == 'SSH':
-            self.port.get_adjustment().set_value(22)
+            self.builder.get_object('port').set_value(22)
 
-    def on_pref_dialog_response(self, widget, data=None):
-        if data == 1:
-            self.config.set('General', 'trash', self.trash.get_active())
-            self.config.set('General', 'shortenurl', self.shortenurl.get_active())
-            self.config.set('General', 'savedir', self.savedir.get_filename())
-            self.config.set('General', 'autostart', self.autostart.get_active())
-            self.config.set('General', 'delay', int(self.delayscale.get_value()))
-            self.config.set('General', 'force_fallback', self.force_fallback.get_active())
-            self.config.set('Hotkeys', 'capturearea', self.capturearea.get_text())
-            self.config.set('Hotkeys', 'capturescreen', self.capturescreen.get_text())
-            self.config.set('Hotkeys', 'capturewindow', self.capturewindow.get_text())
-            self.config.set('Upload', 'type', self.combobox.get_active_text())
-            self.config.set('Upload', 'hostname', self.server.get_text())
-            self.config.set('Upload', 'port', self.port.get_value_as_int())
-            self.config.set('Upload', 'username', self.username.get_text())
-            self.config.set('Upload', 'password', self.password.get_text())
-            self.config.set('Upload', 'directory', self.directory.get_text())
-            self.config.set('Upload', 'url', self.url.get_text())
-            self.config.save()
-        self.dialog.destroy()
+    def on_dialog_response(self, widget, data=None):
+        if data != 1:
+            widget.destroy()
+            return
+        for (kind, name, section, option) in WIDGETS:
+            widget = self.builder.get_object(name)
+            if kind == bool:
+                value = widget.get_active()
+            elif kind == int:
+                value = int(widget.get_value())
+            elif kind == str:
+                value = widget.get_text()
+            elif kind == file:
+                value = widget.get_filename()
+            elif kind == None:
+                value = widget.get_active_text()
+            self.config.set(section, option, value)
+        self.config.save()
 
-    def on_pref_dialog_destroy(self, widget, data=None):
-        pass
-
-    def on_pref_dialog_close(self, widget, data=None):
-        pass
-
-if __name__=="__main__":
-    p = PrefDialog() # For testing purposes only
-    p.run()
+if __name__ == '__main__':
+    dialog = PreferencesDialog()
+    dialog.run()

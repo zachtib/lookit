@@ -74,7 +74,7 @@ def do_capture_screen():
     uploader.upload_pixbuf(pb)
 
 def do_preferences():
-    preferences.PrefDialog().run()
+    preferences.PreferencesDialog().run()
 
 def do_about():
     about.AboutDialog().run()
