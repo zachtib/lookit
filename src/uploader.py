@@ -223,7 +223,6 @@ def upload_file(image, existing_file=False):
     if config.getboolean('General', 'shortenurl') and proto != None:
         url = urllib.urlopen('http://is.gd/api.php?longurl={0}'
                         .format(url)).readline()
-        print "URL Shortened:", url
     if not existing_file:
         if config.getboolean('General', 'trash'):
             os.remove(os.path.abspath(image))
