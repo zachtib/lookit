@@ -50,7 +50,7 @@ class LookitConfig(RawConfigParser):
     def __init__(self, filename=CONFIG_FILE):
         RawConfigParser.__init__(self)
         self.filename = filename
-        self.load(self.filename)
+        self.load()
 
     def get(self, section, option):
         if option == 'password':
@@ -134,5 +134,4 @@ def quickset(section, option, value):
 
 if __name__ == '__main__':
     lc = LookitConfig()
-    lc.load_defaults()
 
