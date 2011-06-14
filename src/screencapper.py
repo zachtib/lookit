@@ -1,8 +1,11 @@
 import gtk
 import time
 
+import lookitconfig
+
 def capture_screen():
-    time.sleep(1)
+    if lookitconfig.LookitConfig().getint('General', 'delay') == 0:
+        time.sleep(1)
     root = gtk.gdk.get_default_root_window()
     size = root.get_geometry()
     pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False,
@@ -14,7 +17,8 @@ def capture_screen():
     return pixbuf
 
 def capture_active_window():
-    time.sleep(1)
+    if lookitconfig.LookitConfig().getint('General', 'delay') == 0:
+        time.sleep(1)
     root = gtk.gdk.get_default_root_window()
     window = gtk.gdk.screen_get_default().get_active_window()
     size = window.get_geometry()
