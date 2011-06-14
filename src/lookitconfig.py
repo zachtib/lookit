@@ -96,22 +96,6 @@ class LookitConfig(RawConfigParser):
         self.remove_section(old_name)
         return True
 
-    def getboolean(self, section, option):
-        try:
-            return RawConfigParser.getboolean(self, section, option)
-        except AttributeError:
-            # XXX:
-            # For some reason, getboolean likes to die sometimes.
-            # Until I figure it out, this will act as a band-aid
-            # to prevent the error from causing Lookit to not work
-            value = self.get(section, option)
-            if type(value) == bool:
-                return value
-            elif type(value) == str:
-                return value == 'True'
-            else:
-                return bool(value)
-
     def load(self):
         self.read(self.filename)
 
