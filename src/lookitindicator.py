@@ -54,7 +54,9 @@ class LookitIndicator:
         self.menu.append(item)
 
     def set_delay(self, value):
-        lookitconfig.quickset('General', 'delay', value)
+        config = lookitconfig.LookitConfig()
+        config.set('General', 'delay', value)
+        config.save()
 
     def handle_menu_item(self, widget=None, command=None):
         if command == cmd.CAPTURE_AREA:

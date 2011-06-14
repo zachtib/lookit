@@ -123,15 +123,6 @@ class LookitConfig(RawConfigParser):
         f.flush()
         f.close()
 
-def quickget(section, option):
-    c = LookitConfig()
-    return c.get(section, option)
-
-def quickset(section, option, value):
-    c = LookitConfig()
-    c.set(section, option, value)
-    c.save()
-
 if __name__ == '__main__':
     lc = LookitConfig()
 

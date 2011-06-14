@@ -39,7 +39,7 @@ def upload_file(filename, existing_file=False):
     uploader.upload_file(filename, existing_file)
 
 def handle_delay():
-    delay_value = int(lookitconfig.quickget('General', 'delay'))
+    delay_value = lookitconfig.LookitConfig().getint('General', 'delay')
     time.sleep(delay_value)
 
 def do_capture_area():
