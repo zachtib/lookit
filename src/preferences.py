@@ -99,19 +99,20 @@ class PreferencesDialog:
             widget.destroy()
             return
         for (kind, name, section, option) in WIDGETS:
-            widget = self.builder.get_object(name)
+            field = self.builder.get_object(name)
             if kind == bool:
-                value = widget.get_active()
+                value = field.get_active()
             elif kind == int:
-                value = int(widget.get_value())
+                value = int(field.get_value())
             elif kind == str:
-                value = widget.get_text()
+                value = field.get_text()
             elif kind == file:
-                value = widget.get_filename()
+                value = field.get_filename()
             elif kind == None:
-                value = widget.get_active_text()
+                value = field.get_active_text()
             self.config.set(section, option, value)
         self.config.save()
+        widget.destroy()
 
 if __name__ == '__main__':
     dialog = PreferencesDialog()
