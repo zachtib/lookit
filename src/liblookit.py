@@ -33,10 +33,14 @@ def get_data_dir():
     return p
 
 def show_notification(title, message):
-    pynotify.init('Lookit')
-    n = pynotify.Notification(title, message, 'lookit')
-    n.set_hint_string('append', '')
-    n.show()
+    try:
+        pynotify.init('Lookit')
+        n = pynotify.Notification(title, message, 'lookit')
+        n.set_hint_string('append', '')
+        n.show()
+    except Exception as e:
+        print 'An error occurred trying to show notifications:'
+        print e
 
 def migrate_from_1_0():
     old_config = os.path.expanduser('~/.config/lookit.conf')
