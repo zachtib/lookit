@@ -22,14 +22,8 @@ import os
 import sys
 import time
 
-try:
-    # Try to import these from current directory, in case running from src
-    import liblookit
-    import lookitindicator
-except ImportError:
-    # Then fall back to globally installed versions
-    from lookit import liblookit
-    from lookit import lookitindicator
+from lookit import liblookit
+from lookit import lookitindicator
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
