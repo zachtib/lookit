@@ -16,7 +16,7 @@ XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~/.cache')
 CONFIG_DIR = BaseDirectory.save_config_path('lookit')
 LOG_FILE = os.path.join(CONFIG_DIR, 'log')
 
-VERSION = (1, 1, 0)
+VERSION = (1, 2, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 
 def enum(*sequential, **named):
