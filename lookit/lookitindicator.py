@@ -1,10 +1,10 @@
 import appindicator
 import gtk
 
-import liblookit
-import lookitconfig
+from . import liblookit
+from . import lookitconfig
 
-from liblookit import enum
+from .liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
                 'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT',
                 'DELAY_0', 'DELAY_3', 'DELAY_5', 'DELAY_10')
@@ -80,7 +80,7 @@ class LookitIndicator:
         elif command == cmd.DELAY_10:
             self.set_delay(10)
         else:
-            print 'Error: reached end of handle_menu_item'
+            print('Error: reached end of handle_menu_item')
 
 if __name__ == '__main__':
 	i = LookitIndicator()

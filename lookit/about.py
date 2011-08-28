@@ -2,7 +2,7 @@ import gtk
 import sys
 import os
 
-import liblookit
+from . import liblookit
 
 class AboutDialog:
     def __init__(self):
@@ -12,7 +12,7 @@ class AboutDialog:
             xmlfile = os.path.join(datadir, 'about.xml')
             builder.add_from_file(xmlfile)
         except:
-            print "Error loading XML file"
+            print("Error loading XML file")
             sys.exit(1)
 
         self.dialog = builder.get_object("about_dialog")

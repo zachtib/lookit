@@ -2,10 +2,10 @@ import gtk
 import os
 import sys
 
-import liblookit
-import lookitconfig
+from . import liblookit
+from . import lookitconfig
 
-from uploader import PROTO_LIST as CONNECTION_TYPES
+from .uploader import PROTO_LIST as CONNECTION_TYPES
 
 WIDGETS = ( (bool, 'trash', 'General', 'trash'),
             (bool, 'shortenurl', 'General', 'shortenurl'),
@@ -33,7 +33,7 @@ class PreferencesDialog:
             xmlfile = os.path.join(datadir, 'preferences.xml')
             self.builder.add_from_file(xmlfile)
         except Exception as e:
-            print e
+            print(e)
             sys.exit(1)
 
         connections = gtk.ListStore(str)

@@ -2,7 +2,7 @@ import cairo
 import gtk
 import gtk.gdk
 
-import screencapper
+from . import screencapper
 
 class Selector:
     def __init__(self):
@@ -135,4 +135,4 @@ class Selector:
 
 if __name__ == '__main__':
     # For testing purposes only
-    print Selector().get_selection()
+    print(Selector().get_selection())

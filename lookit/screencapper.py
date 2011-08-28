@@ -1,7 +1,7 @@
 import gtk
 import time
 
-import lookitconfig
+from . import lookitconfig
 
 def capture_screen():
     if lookitconfig.LookitConfig().getint('General', 'delay') == 0:

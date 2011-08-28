@@ -54,7 +54,7 @@ if __name__ == '__main__':
     liblookit.migrate_from_1_0()
 
     if args.version:
-        print 'Lookit', liblookit.VERSION_STR
+        print('Lookit', liblookit.VERSION_STR)
         sys.exit(0)
 
     if args.image:

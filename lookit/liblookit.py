@@ -2,12 +2,12 @@ import os
 import pynotify
 import time
 
-import about
-import lookitconfig
-import preferences
-import screencapper
-import selector
-import uploader
+from . import about
+from . import lookitconfig
+from . import preferences
+from . import screencapper
+from . import selector
+from . import uploader
 
 from xdg import BaseDirectory
 
@@ -20,7 +20,7 @@ VERSION = (2, 0, 0)
 VERSION_STR = '.'.join(str(num) for num in VERSION)
 
 def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(len(sequential))), **named)
+    enums = dict(list(zip(sequential, list(range(len(sequential))))), **named)
     return type('Enum', (), enums)
 
 def str_to_tuple(s):
@@ -39,8 +39,8 @@ def show_notification(title, message):
         n.set_hint_string('append', '')
         n.show()
     except Exception as e:
-        print 'An error occurred trying to show notifications:'
-        print e
+        print('An error occurred trying to show notifications:')
+        print(e)
 
 def migrate_from_1_0():
     old_config = os.path.expanduser('~/.config/lookit.conf')

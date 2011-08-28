@@ -7,8 +7,8 @@ import shutil
 import socket
 import tempfile
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 PROTO_LIST = ['None']
 
@@ -16,45 +16,45 @@ try:
 	import ftplib
 	PROTO_LIST.append('FTP')
 except ImportError:
-	print 'FTP support not found'
+	print('FTP support not found')
 
 try:
 	import paramiko
 	PROTO_LIST.append('SSH')
 except ImportError:
-	print 'SFTP support not found'
+	print('SFTP support not found')
 
 try:
 	import ubuntuone
 	import ubuntuone.storageprotocol
 	# PROTO_LIST.append('Ubuntu One') # Not yet supported
 except ImportError:
-	print 'Ubuntu One support not found'
+	print('Ubuntu One support not found')
 
 try:
-    import imgur
+    from . import imgur
     PROTO_LIST.append('Imgur')
 except ImportError:
-    print 'Imgur support not available'
+    print('Imgur support not available')
 
 try:
 	import pycurl
 	import re
 	PROTO_LIST.append('Omploader')
 except ImportError:
-	print 'Omploader support not available'
+	print('Omploader support not available')
 
 try:
     import cloud
     if cloud.POSTER and cloud.ORDERED_DICT:
         PROTO_LIST.append('CloudApp')
     else:
-        print 'CloudApp support not available'
+        print('CloudApp support not available')
 except ImportError:
-    print 'CloudApp support not available'
+    print('CloudApp support not available')
 
-import liblookit
-import lookitconfig
+from . import liblookit
+from . import lookitconfig
 
 class OmploaderUploader:
 	def __init__(self):
@@ -114,7 +114,7 @@ def upload_file_sftp(f, hostname, port, username, password, directory, url):
 
 def upload_file_omploader(f):
 	if not 'Omploader' in PROTO_LIST:
-		print 'Error: Omploader not supported'
+		print('Error: Omploader not supported')
 	i = OmploaderUploader()
 	i.upload(f)
 	if not 'error_msg' in i.mapping:
@@ -124,7 +124,7 @@ def upload_file_omploader(f):
 
 def upload_file_imgur(f):
 	if not 'Imgur' in PROTO_LIST:
-		print 'Error: Imgur not supported'
+		print('Error: Imgur not supported')
 	i = imgur.ImgurUploader()
 	i.upload(f)
 	if not 'error_msg' in i.mapping:
@@ -134,7 +134,7 @@ def upload_file_imgur(f):
 
 def upload_file_cloud(f, username, password):
     if not 'CloudApp' in PROTO_LIST:
-        print 'Error: CloudApp not supported'
+        print('Error: CloudApp not supported')
     try:
         mycloud = cloud.Cloud()
         mycloud.auth(username, password)
@@ -183,7 +183,7 @@ def upload_file(image, existing_file=False):
         try:
             f = open(liblookit.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Omploader: ' + data['original_image'] + '\n')
-        except IOError, e:
+        except IOError as e:
             pass
         finally:
             f.close()
@@ -194,7 +194,7 @@ def upload_file(image, existing_file=False):
             f = open(liblookit.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
             f.write('Delete url: ' + data['delete_page'] + '\n')
-        except IOError, e:
+        except IOError as e:
             pass
         finally:
             f.close()
@@ -217,11 +217,11 @@ def upload_file(image, existing_file=False):
     if data:
         url = data['original_image']
     else:
-        url = urlparse.urljoin(config.get('Upload', 'url'),
+        url = urllib.parse.urljoin(config.get('Upload', 'url'),
             os.path.basename(image))
 
     if config.getboolean('General', 'shortenurl') and proto != None:
-        url = urllib.urlopen('http://is.gd/api.php?longurl={0}'
+        url = urllib.request.urlopen('http://is.gd/api.php?longurl={0}'
                         .format(url)).readline()
     if not existing_file:
         if config.getboolean('General', 'trash'):
@@ -239,7 +239,7 @@ def upload_file(image, existing_file=False):
                 shutil.move(image, destination)
                 image = destination
             except IOError:
-                print 'Error moving file'
+                print('Error moving file')
 
     clipboard = gtk.clipboard_get()
     clipboard.set_text(url)
