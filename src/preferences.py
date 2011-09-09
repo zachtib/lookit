@@ -85,6 +85,10 @@ class PreferencesDialog:
                 self.builder.get_object(field).set_sensitive(True)
             for field in server_port_dir_url:
                 self.builder.get_object(field).set_sensitive(False)
+	elif proto in ['HTTP']:
+		for field in all_fields:
+			self.builder.get_object(field).set_sensitive(False)
+		self.builder.get_object('url').set_sensitive(True)
         else:
             for field in all_fields:
                 self.builder.get_object(field).set_sensitive(False)
@@ -93,6 +97,8 @@ class PreferencesDialog:
             self.builder.get_object('port').set_value(21)
         elif proto == 'SSH':
             self.builder.get_object('port').set_value(22)
+	elif proto == 'HTTP':
+	    self.builder.get_object('port').set_value(80)
 
     def on_dialog_response(self, widget, data=None):
         if data != 1:

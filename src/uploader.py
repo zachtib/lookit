@@ -41,8 +41,10 @@ try:
 	import pycurl
 	import re
 	PROTO_LIST.append('Omploader')
+	PROTO_LIST.append('HTTP')
 except ImportError:
 	print 'Omploader support not available'
+	print 'HTTP support not available'	
 
 try:
     import cloud
@@ -94,6 +96,18 @@ def upload_file_ftp(f, hostname, port, username, password, directory, url):
 		return False, 'Error occured during FTP upload'
 
 	i.close()
+
+	return True, None
+
+def upload_file_http(f, url):
+	c = pycurl.Curl()
+	values = [	('file', (c.FORM_FILE, image))]
+	c.setopt(c.URL, url)
+	c.setopt(c.HTTPPOST, values)
+	c.setopt(c.WRITEFUNCTION, self.curl_response)
+
+	c.perform()
+	c.close()
 
 	return True, None
 
@@ -167,6 +181,9 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'directory'),
                     config.get('Upload', 'url'),
                     )
+    elif proto == 'HTTP':
+	liblookit.show_notification('Lookit', 'Upload image to {0}...'.format(config.get('Upload', 'hostname')))
+	success, data = upload_file_http(image, config.get('Upload', hostname))
     elif proto == 'FTP':
         liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
