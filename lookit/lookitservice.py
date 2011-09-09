@@ -25,6 +25,22 @@ class LookitService(dbus.service.Object):
         print('Stopping Lookit Service')
         self.loop.quit()
 
+    @dbus.service.method(SERVICE_NAME)
+    def capture_area(self):
+        pass
+
+    @dbus.service.method(SERVICE_NAME)
+    def capture_screen(self):
+        pass
+
+    @dbus.service.method(SERVICE_NAME)
+    def capture_window(self):
+        pass
+
+    @dbus.service.method(SERVICE_NAME, in_signature='s')
+    def upload_file(self, filename):
+        print('Uploading {0}...'.format(filename))
+
 if __name__ == '__main__':
     service = LookitService()
     service.start()
