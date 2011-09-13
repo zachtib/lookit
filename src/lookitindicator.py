@@ -1,4 +1,9 @@
-import appindicator
+try:
+    import appindicator
+    INDICATOR_SUPPORT = True
+except ImportError:
+    INDICATOR_SUPPORT = False
+
 import gtk
 
 import liblookit

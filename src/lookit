@@ -83,6 +83,9 @@ if __name__ == '__main__':
         liblookit.do_about()
     else:
         # Start the Lookit interface. For now, this is just an AppIndicator
-        indicator = lookitindicator.LookitIndicator()
-        gtk.main()
+        if lookitindicator.INDICATOR_SUPPORT:
+            indicator = lookitindicator.LookitIndicator()
+            gtk.main()
+        else:
+            print 'AppIndicator support not available'
 
