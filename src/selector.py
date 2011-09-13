@@ -110,7 +110,7 @@ class Selector:
 
     def key_pressed(self, widget, event):
         if event.keyval == gtk.gdk.keyval_from_name('Escape'):
-            gtk.main_quit()
+            self.button_released(widget, event)
         else:
             return False
 
