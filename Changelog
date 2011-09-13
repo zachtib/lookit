@@ -1,5 +1,8 @@
 YYYY-MM-DD: Lookit 2.0.0
-	* New Icons
+	* New GUI using GObject Introspection (PyGI)
+	* Background service accesible via DBus
+	* Python 2.7/3.2 compatible
+	* New Icons (thanks @HarnoRanaivo)
 
 2011-07-08: Lookit 1.1.0
 	* New screen selector for composited desktops
