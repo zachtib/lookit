@@ -39,14 +39,12 @@ class Selector:
     def expose(self, widget, event=None):
         cr = widget.window.cairo_create()
         if self.is_composited and self.supports_alpha and not self.ffb:
-            cr.set_operator(cairo.OPERATOR_SOURCE)
-            cr.set_source_rgba(0.125, 0.125, 0.125, 0.75)
+            cr.set_operator(cairo.OPERATOR_CLEAR)
+            cr.set_source_rgba(0, 0, 0, 0)
             cr.paint()
-
             if self.mouse_down:
-                cr.set_operator(cairo.OPERATOR_CLEAR)
                 cr.rectangle(self.x, self.y, self.dx, self.dy)
-                cr.fill()
+            
         else:
             cr.set_operator(cairo.OPERATOR_SOURCE)
             if self.pixbuf is None:
@@ -55,9 +53,9 @@ class Selector:
                 cr.paint()
 
             if self.mouse_down:
-                cr.set_source_rgb(1.0, 0, 0)
                 cr.rectangle(self.x, self.y, self.dx, self.dy)
                 cr.stroke()
+        
         return False
 
     def undraw_rect(self, widget):
