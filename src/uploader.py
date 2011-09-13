@@ -41,8 +41,10 @@ try:
 	import pycurl
 	import re
 	PROTO_LIST.append('Omploader')
+	PROTO_LIST.append('HTTP')
 except ImportError:
 	print 'Omploader support not available'
+	print 'HTTP support not available'	
 
 try:
     import cloud
@@ -77,6 +79,31 @@ class OmploaderUploader:
 		m = re.findall("v\w+", self.response)
 		self.mapping['original_image'] = "http://ompldr.org/%s" % m[2]
 
+
+class HTTPUploader:
+	def __init__(self):
+		self.response = ''
+
+	def curl_response(self, buf):
+		self.response = self.response + buf
+
+	def upload(self, image, url):
+		c = pycurl.Curl()
+		values = [	('file', (c.FORM_FILE, image))]
+		c.setopt(c.URL, url)
+		c.setopt(c.HTTPPOST, values)
+		c.setopt(c.WRITEFUNCTION, self.curl_response)
+		
+		try:
+			c.perform()
+		except pycurl.error:
+			c.close()
+			return False, "There was an error during HTTP upload."
+		
+		c.close()
+
+		return True, self.response
+
 def get_proto_list():
 	return PROTO_LIST
 
@@ -96,6 +123,19 @@ def upload_file_ftp(f, hostname, port, username, password, directory, url):
 	i.close()
 
 	return True, None
+
+def upload_file_http(f, url):
+	i = HTTPUploader()
+	
+	status, data = i.upload(f, url)	
+
+	if status:
+		obj = {}
+		obj['original_image'] = data;
+
+		return True, obj
+	else:
+		return False, data
 
 def upload_file_sftp(f, hostname, port, username, password, directory, url):
     try:
@@ -167,6 +207,9 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'directory'),
                     config.get('Upload', 'url'),
                     )
+    elif proto == 'HTTP':
+	liblookit.show_notification('Lookit', 'Upload image to {0}...'.format(config.get('Upload', 'URL')))
+	success, data = upload_file_http(image, config.get('Upload', 'URL'))
     elif proto == 'FTP':
         liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
