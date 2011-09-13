@@ -96,8 +96,8 @@ class Selector:
 
     def button_released(self, widget, event):
         self.mouse_down = False
-        self.overlay.hide_all()
         gtk.main_quit()
+        self.overlay.destroy()
 
     def motion_notify(self, widget, event):
         if self.mouse_down:
