@@ -44,7 +44,7 @@ try:
 	PROTO_LIST.append('HTTP')
 except ImportError:
 	print 'Omploader support not available'
-	print 'HTTP support not available'	
+	print 'HTTP support not available'
 
 try:
     import cloud
@@ -93,13 +93,13 @@ class HTTPUploader:
 		c.setopt(c.URL, url)
 		c.setopt(c.HTTPPOST, values)
 		c.setopt(c.WRITEFUNCTION, self.curl_response)
-		
+
 		try:
 			c.perform()
 		except pycurl.error:
 			c.close()
 			return False, "There was an error during HTTP upload."
-		
+
 		c.close()
 
 		return True, self.response
@@ -126,8 +126,8 @@ def upload_file_ftp(f, hostname, port, username, password, directory, url):
 
 def upload_file_http(f, url):
 	i = HTTPUploader()
-	
-	status, data = i.upload(f, url)	
+
+	status, data = i.upload(f, url)
 
 	if status:
 		obj = {}
@@ -139,9 +139,13 @@ def upload_file_http(f, url):
 
 def upload_file_sftp(f, hostname, port, username, password, directory, url):
     try:
-        t = paramiko.Transport((hostname, port))
-        t.connect(username=username, password=password)
-        sftp = paramiko.SFTPClient.from_transport(t)
+        # Debug info.
+        #paramiko.util.log_to_file('paramiko.log')
+
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname, port, username, password)
+        sftp = client.open_sftp()
         sftp.chdir(directory)
         sftp.put(f, os.path.basename(f))
     except socket.gaierror:
