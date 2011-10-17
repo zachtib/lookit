@@ -137,14 +137,21 @@ def upload_file_http(f, url):
 	else:
 		return False, data
 
-def upload_file_sftp(f, hostname, port, username, password, directory, url):
+def upload_file_sftp(f, hostname, port, username, password, ssh_key_file, directory, url):
     try:
         # Debug info.
         #paramiko.util.log_to_file('paramiko.log')
 
+        # Paramiko needs 'None' for these two, probably a bad place to put them
+        # but I'm lazy.
+        if password == '':
+            password = None
+        if ssh_key_file == '':
+            ssh_key_file = None
+
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname, port, username, password)
+        client.connect(hostname, port, username, password, key_filename=ssh_key_file)
         sftp = client.open_sftp()
         sftp.chdir(directory)
         sftp.put(f, os.path.basename(f))
@@ -208,6 +215,7 @@ def upload_file(image, existing_file=False):
                     int(config.get('Upload', 'port')),
                     config.get('Upload', 'username'),
                     config.get('Upload', 'password'),
+                    config.get('Upload', 'ssh_key_file'),
                     config.get('Upload', 'directory'),
                     config.get('Upload', 'url'),
                     )

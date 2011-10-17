@@ -41,6 +41,7 @@ DEFAULTS = {'General': {'shortenurl': False,
                         'hostname': '',
                         'port': 0,
                         'username': '',
+                        'ssh_key_file': '',
                         'directory': '',
                         'url': 'http://'}
 }

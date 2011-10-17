@@ -20,6 +20,7 @@ WIDGETS = ( (bool, 'trash', 'General', 'trash'),
             (str, 'username', 'Upload', 'username'),
             (str, 'password', 'Upload', 'password'),
             (int, 'port', 'Upload', 'port'),
+            (str, 'ssh_key_file', 'Upload', 'ssh_key_file'),
             (str, 'directory', 'Upload', 'directory'),
             (str, 'url', 'Upload', 'url'),
             (None, 'combobox', 'Upload', 'type'),
@@ -77,6 +78,9 @@ class PreferencesDialog:
         server_port_dir_url = ('server', 'port', 'directory', 'url')
         all_fields = user_pass + server_port_dir_url
 
+        # Set to False as only used for SSH.
+        self.builder.get_object('ssh_key_file').set_sensitive(False)
+
         if proto in ['FTP', 'SSH']:
             for field in all_fields:
                 self.builder.get_object(field).set_sensitive(True)
@@ -96,6 +100,7 @@ class PreferencesDialog:
         if proto == 'FTP':
             self.builder.get_object('port').set_value(21)
         elif proto == 'SSH':
+            self.builder.get_object('ssh_key_file').set_sensitive(True)
             self.builder.get_object('port').set_value(22)
 	elif proto == 'HTTP':
 	    self.builder.get_object('port').set_value(80)
