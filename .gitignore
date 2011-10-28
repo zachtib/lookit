@@ -2,5 +2,7 @@
 /dist/
 /debian/
 /src/*.png
+.project
+.pydevproject
 *.swp
 *.pyc
