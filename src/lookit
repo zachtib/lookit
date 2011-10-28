@@ -1,0 +1,91 @@
+#!/usr/bin/python2
+
+# Copyright (c) 2010-2011 by Zach Tibbitts
+#
+# GNU General Public Licence (GPL)
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse
+import gtk
+import os
+import sys
+import time
+
+try:
+    # Try to import these from current directory, in case running from src
+    import liblookit
+    import lookitindicator
+except ImportError:
+    # Then fall back to globally installed versions
+    from lookit import liblookit
+    from lookit import lookitindicator
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Lookit Screenshot Uploader')
+    parser.add_argument('image', metavar='IMAGE', nargs='?',
+                        help='An image to upload')
+    parser.add_argument('--delay', metavar='DELAY', action='store',
+                        dest='delay', type=int,
+                        help='Delay before taking screenshot')
+    parser.add_argument('--capture-area', action='store_const',
+                        const='CAPTURE_AREA', dest='command',
+                        help='Capture and upload an area of the screen')
+    parser.add_argument('--capture-window', action='store_const',
+                        const='CAPTURE_ACTIVE_WINDOW', dest='command',
+                        help='Capture and upload the active window')
+    parser.add_argument('--capture-screen', action='store_const',
+                        const='CAPTURE_SCREEN', dest='command',
+                        help='Capture and upload the entire screen')
+    parser.add_argument('--preferences', action='store_const',
+                        const='SHOW_PREFERENCES', dest='command',
+                        help='Configure Lookit')
+    parser.add_argument('--about', action='store_const',
+                        const='SHOW_ABOUT', dest='command',
+                        help='Show the About Dialog')
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='print version number and exit')
+    args = parser.parse_args()
+
+    liblookit.migrate_from_1_0()
+
+    if args.version:
+        print 'Lookit', liblookit.VERSION_STR
+        sys.exit(0)
+
+    if args.image:
+        if os.path.isfile(args.image):
+            liblookit.upload_file(args.image, True)
+        sys.exit(0)
+
+    if args.delay:
+        time.sleep(args.delay)
+
+    if args.command == 'CAPTURE_AREA':
+        liblookit.do_capture_area()
+    elif args.command == 'CAPTURE_ACTIVE_WINDOW':
+        liblookit.do_capture_window()
+    elif args.command == 'CAPTURE_SCREEN':
+        liblookit.do_capture_screen()
+    elif args.command == 'SHOW_PREFERENCES':
+        liblookit.do_preferences()
+    elif args.command == 'SHOW_ABOUT':
+        liblookit.do_about()
+    else:
+        # Start the Lookit interface. For now, this is just an AppIndicator
+        if lookitindicator.INDICATOR_SUPPORT:
+            indicator = lookitindicator.LookitIndicator()
+            gtk.main()
+        else:
+            print 'AppIndicator support not available'
+
