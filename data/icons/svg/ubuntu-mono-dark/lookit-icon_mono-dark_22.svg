@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="22" width="21" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <title>Lookit icon - mono dark - 22px</title>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Lookit icon - mono dark - 22px</dc:title>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Harenome Ranaivoarivony Razanajato</dc:title>
+     </cc:Agent>
+    </dc:creator>
+    <cc:license rdf:resource="http://www.gnu.org/licenses/gpl.html"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g fill-rule="evenodd" transform="translate(0,-1030.3622)">
+  <path opacity="0.3" d="M10.5,1031.4c-5.799,0-10.5,4.7-10.5,10.5s4.701,10.5,10.5,10.5,10.5-4.7,10.5-10.5-4.701-10.5-10.5-10.5zm0,1c5.247,0,9.5,4.2,9.5,9.5,0,5.2-4.253,9.5-9.5,9.5-5.2467,0-9.5-4.3-9.5-9.5,0-5.3,4.2533-9.5,9.5-9.5zm0,1c-4.6944,0-8.5,3.8-8.5,8.5s3.8056,8.5,8.5,8.5c4.694,0,8.5-3.8,8.5-8.5s-3.806-8.5-8.5-8.5zm0,7c0.828,0,1.5,0.6,1.5,1.5,0,0.8-0.672,1.5-1.5,1.5-0.8284,0-1.5-0.7-1.5-1.5,0-0.9,0.6716-1.5,1.5-1.5z" fill="#000"/>
+  <path d="M10.5,0c-5.799,0-10.5,4.701-10.5,10.5s4.701,10.5,10.5,10.5,10.5-4.701,10.5-10.5-4.701-10.5-10.5-10.5zm0,1c5.247,0,9.5,4.2533,9.5,9.5,0,5.247-4.253,9.5-9.5,9.5-5.2467,0-9.5-4.253-9.5-9.5,0-5.2467,4.2533-9.5,9.5-9.5zm0,1c-4.6944,0-8.5,3.8056-8.5,8.5,0,4.694,3.8056,8.5,8.5,8.5,4.694,0,8.5-3.806,8.5-8.5,0-4.6944-3.806-8.5-8.5-8.5zm0,7c0.828,0,1.5,0.6716,1.5,1.5,0,0.828-0.672,1.5-1.5,1.5-0.8284,0-1.5-0.672-1.5-1.5,0-0.8284,0.6716-1.5,1.5-1.5z" transform="translate(0,1030.3622)" fill="#dfdbd2"/>
+ </g>
+</svg>

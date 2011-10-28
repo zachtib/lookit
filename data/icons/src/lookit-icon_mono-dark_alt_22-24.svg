@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="lookit-icon_mono-dark_alt_22-24.svg"
+   style="display:inline">
+  <title
+     id="title4378">Lookit icon - mono dark - alt - 22-24px</title>
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="16"
+     inkscape:cx="15.248274"
+     inkscape:cy="6.7227714"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-page="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-global="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Lookit icon - mono dark - alt - 22-24px</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Harenome Ranaivoarivony Razanajato</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://www.gnu.org/licenses/gpl.html" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="background"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1030.3622)"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:#f0f0f0;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2985"
+       width="42"
+       height="42"
+       x="-10"
+       y="1020.3622"
+       rx="2.5869567"
+       ry="2.5869567" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="icon"
+     transform="translate(0,-234)"
+     style="display:inline">
+    <path
+       inkscape:connector-curvature="0"
+       id="path3754"
+       d="M 11,237 C 6.0294373,237 2,241.02944 2,246 C 2,246.71008 2.094537,247.39984 2.25,248.0625 C 2.5007918,247.73266 2.7830026,247.44247 3.09375,247.1875 C 3.0360008,246.79974 3,246.40384 3,246 C 3,241.58172 6.5817221,238 11,238 C 15.418278,238 19,241.58172 19,246 C 19,247.03553 18.795657,248.02922 18.4375,248.9375 C 18.779726,248.96582 19.099402,249.04144 19.40625,249.1875 C 19.781702,248.19653 20,247.12254 20,246 C 20,241.02944 15.970563,237 11,237 z M 11,239 C 7.1340068,239 4,242.13401 4,246 C 4,246.1892 4.0165197,246.37709 4.03125,246.5625 C 5.1251832,246.08322 6.465274,246.11392 8,247 C 10.852832,242.05875 17.554954,245.31758 17.6875,248.09375 C 17.892026,247.43618 18,246.72487 18,246 C 18,242.13401 14.865993,239 11,239 z M 12.09375,245.46875 C 10.806527,245.56913 9.4913316,246.28296 8.5,248 C 2.4819254,244.52546 -0.03703917,253.24656 3,255 L 19,255 C 21.927595,252.07241 19.267111,249.25855 16.5,250 C 17.629105,248.04433 14.925641,245.24791 12.09375,245.46875 z"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;opacity:0.3" />
+    <path
+       style="fill:#dfdbd2;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       d="M 11,2 C 6.0294373,2 2,6.0294369 2,11 C 2,11.71008 2.094537,12.399837 2.25,13.0625 C 2.5007918,12.732665 2.7830026,12.44247 3.09375,12.1875 C 3.0360008,11.799736 3,11.403838 3,11 C 3,6.5817218 6.5817221,3 11,3 C 15.418278,3 19,6.5817218 19,11 C 19,12.035534 18.795657,13.029216 18.4375,13.9375 C 18.779726,13.965818 19.099402,14.041441 19.40625,14.1875 C 19.781702,13.196532 20,12.12254 20,11 C 20,6.0294369 15.970563,2 11,2 z M 11,4 C 7.1340068,4 4,7.1340063 4,11 C 4,11.189197 4.0165197,11.377091 4.03125,11.5625 C 5.1251832,11.083218 6.465274,11.113925 8,12 C 10.852832,7.0587476 17.554954,10.317581 17.6875,13.09375 C 17.892026,12.436178 18,11.724874 18,11 C 18,7.1340063 14.865993,4 11,4 z M 12.09375,10.46875 C 10.806527,10.56913 9.4913316,11.282963 8.5,13 C 2.4819254,9.52546 -0.03703917,18.24656 3,20 L 19,20 C 21.927595,17.07241 19.267111,14.25855 16.5,15 C 17.629105,13.044331 14.925641,10.247913 12.09375,10.46875 z"
+       transform="translate(0,234)"
+       id="path3887"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
