@@ -54,7 +54,7 @@ class LookitService(dbus.service.Object):
         if SERVICE_NAME not in bus.list_names():
             print('Forking the service...')
             pid = os.fork()
-            print pid
+            print (pid)
             if pid == 0:
                 LookitService().start()
             else:
