@@ -201,7 +201,7 @@ def upload_pixbuf(pb):
         pb.save_to_callback(ftmp.write, 'png')
         ftmp.flush()
         ftmp.close()
-        upload_file(ftmp.name)
+        return upload_file(ftmp.name)
 
 def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
@@ -302,6 +302,8 @@ def upload_file(image, existing_file=False):
             liblookit.show_notification('Lookit', 'Error: No upload type selected')
         else:
             liblookit.show_notification('Lookit', 'Image saved: ' + image)
+            return image
     else:
         liblookit.show_notification('Lookit', 'Upload complete: ' + url)
+        return url
 

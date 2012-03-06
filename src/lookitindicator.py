@@ -5,6 +5,8 @@ except ImportError:
     INDICATOR_SUPPORT = False
 
 import gtk
+import time
+import webbrowser
 
 import liblookit
 import lookitconfig
@@ -13,6 +15,7 @@ from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
                 'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT',
                 'DELAY_0', 'DELAY_3', 'DELAY_5', 'DELAY_10', 'TOGGLE_UPLOAD')
+MAX_IMAGE_COUNTS = 3
 
 class LookitIndicator:
 
@@ -39,7 +42,6 @@ class LookitIndicator:
         sub.set_submenu(delaymenu)
         self.menu.append(sub)
 
-
         config = lookitconfig.LookitConfig()
         enableupload = config.getboolean('Upload', 'enableupload')
         self.add_check_menu_item('Upload to server', cmd.TOGGLE_UPLOAD, value=enableupload)
@@ -47,6 +49,10 @@ class LookitIndicator:
         self.add_menu_separator()
         self.add_menu_item('Preferences', cmd.SHOW_PREFERENCES)
         self.add_menu_item('About', cmd.SHOW_ABOUT)
+
+        self.image_position = len(self.menu)
+        self.image_list = []
+
         self.add_menu_separator()
         self.add_menu_item('Exit', cmd.EXIT)
 
@@ -83,13 +89,42 @@ class LookitIndicator:
         config.set('Upload', 'enableupload', value)
         config.save()
 
+    def add_image(self, uri):
+        """ Add image into menu and throw away an old image """
+        if len(self.image_list) == 0:
+            item = gtk.SeparatorMenuItem()
+            item.show()
+            self.menu.insert(item, self.image_position)
+            self.image_position += 1
+
+        if len(self.image_list) >= MAX_IMAGE_COUNTS:
+            item = self.image_list.pop(0)
+            self.menu.remove(item)
+
+        label = time.strftime('%H:%M:%S')
+        item = gtk.MenuItem(label)
+        item.connect('activate', self.open_image, uri)
+        item.show()
+        position = self.image_position + len(self.image_list)
+        self.menu.insert(item, position)
+        self.image_list.append(item)
+
+    def open_image(self, widget=None, uri=None):
+        """ Open image and copy URI into clipboard """
+        clipboard = gtk.clipboard_get()
+        clipboard.set_text(uri)
+        clipboard.store()
+
+        webbrowser.open(uri)
+
     def handle_menu_item(self, widget=None, command=None):
+        uri = None
         if command == cmd.CAPTURE_AREA:
-            liblookit.do_capture_area()
+            uri = liblookit.do_capture_area()
         elif command == cmd.CAPTURE_ACTIVE_WINDOW:
-            liblookit.do_capture_window()
+            uri = liblookit.do_capture_window()
         elif command == cmd.CAPTURE_SCREEN:
-            liblookit.do_capture_screen()
+            uri = liblookit.do_capture_screen()
         elif command == cmd.SHOW_PREFERENCES:
             liblookit.do_preferences()
         elif command == cmd.SHOW_ABOUT:
@@ -108,6 +143,9 @@ class LookitIndicator:
             self.set_upload(widget.get_active())
         else:
             print 'Error: reached end of handle_menu_item'
+
+        if uri is not None:
+            self.add_image(uri)
 
 if __name__ == '__main__':
 	i = LookitIndicator()
