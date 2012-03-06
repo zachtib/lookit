@@ -12,7 +12,7 @@ import lookitconfig
 from liblookit import enum
 cmd = enum('CAPTURE_AREA', 'CAPTURE_ACTIVE_WINDOW', 'CAPTURE_SCREEN',
                 'SHOW_PREFERENCES', 'SHOW_ABOUT', 'EXIT',
-                'DELAY_0', 'DELAY_3', 'DELAY_5', 'DELAY_10')
+                'DELAY_0', 'DELAY_3', 'DELAY_5', 'DELAY_10', 'TOGGLE_UPLOAD')
 
 class LookitIndicator:
 
@@ -28,6 +28,8 @@ class LookitIndicator:
         self.add_menu_item('Capture Entire Screen', cmd.CAPTURE_SCREEN)
         self.add_menu_item('Capture Active Window', cmd.CAPTURE_ACTIVE_WINDOW)
 
+        self.add_menu_separator()
+
         delaymenu = gtk.Menu()
         self.add_menu_item('0 seconds', cmd.DELAY_0, delaymenu)
         self.add_menu_item('3 seconds', cmd.DELAY_3, delaymenu)
@@ -36,6 +38,11 @@ class LookitIndicator:
         sub = gtk.MenuItem('Set Delay:')
         sub.set_submenu(delaymenu)
         self.menu.append(sub)
+
+
+        config = lookitconfig.LookitConfig()
+        enableupload = config.getboolean('Upload', 'enableupload')
+        self.add_check_menu_item('Upload to server', cmd.TOGGLE_UPLOAD, value=enableupload)
 
         self.add_menu_separator()
         self.add_menu_item('Preferences', cmd.SHOW_PREFERENCES)
@@ -53,6 +60,14 @@ class LookitIndicator:
             menu = self.menu
         menu.append(item)
 
+    def add_check_menu_item(self, label, command, menu=None, value=True):
+        item = gtk.CheckMenuItem(label)
+        item.set_active(value)
+        item.connect('activate', self.handle_menu_item, command)
+        if menu is None:
+            menu = self.menu
+        menu.append(item)
+
     def add_menu_separator(self):
         item = gtk.SeparatorMenuItem()
         item.show()
@@ -61,6 +76,11 @@ class LookitIndicator:
     def set_delay(self, value):
         config = lookitconfig.LookitConfig()
         config.set('General', 'delay', value)
+        config.save()
+
+    def set_upload(self, value):
+        config = lookitconfig.LookitConfig()
+        config.set('Upload', 'enableupload', value)
         config.save()
 
     def handle_menu_item(self, widget=None, command=None):
@@ -84,6 +104,8 @@ class LookitIndicator:
             self.set_delay(5)
         elif command == cmd.DELAY_10:
             self.set_delay(10)
+        elif command == cmd.TOGGLE_UPLOAD:
+            self.set_upload(widget.get_active())
         else:
             print 'Error: reached end of handle_menu_item'
 

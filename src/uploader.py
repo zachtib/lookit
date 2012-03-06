@@ -207,8 +207,14 @@ def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
 
     proto = config.get('Upload', 'type')
+    # Temporary disable upload
+    if not config.getboolean('Upload', 'enableupload'):
+        proto = 'None'
 
-    if proto == 'SSH':
+    if proto == 'None':
+        success = True
+        data = False
+    elif proto == 'SSH':
         liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
@@ -258,9 +264,6 @@ def upload_file(image, existing_file=False):
         success, data = upload_file_cloud(image,
                     config.get('Upload', 'username'),
                     config.get('Upload', 'password'))
-    elif proto == 'None':
-        success = True
-        data = False
     else:
         success = False
         data = "Error: no such protocol: {0}".format(proto)
