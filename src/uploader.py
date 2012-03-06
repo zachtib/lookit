@@ -215,7 +215,6 @@ def upload_file(image, existing_file=False):
         success = True
         data = False
     elif proto == 'SSH':
-        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -226,10 +225,8 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'HTTP':
-	liblookit.show_notification('Lookit', 'Upload image to {0}...'.format(config.get('Upload', 'URL')))
 	success, data = upload_file_http(image, config.get('Upload', 'URL'))
     elif proto == 'FTP':
-        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -239,7 +236,6 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Omploader':
-        liblookit.show_notification('Lookit', 'Uploading image to Omploader...')
         success, data = upload_file_omploader(image)
         try:
             f = open(liblookit.LOG_FILE, 'ab')
@@ -249,7 +245,6 @@ def upload_file(image, existing_file=False):
         finally:
             f.close()
     elif proto == 'Imgur':
-        liblookit.show_notification('Lookit', 'Uploading image to Imgur...')
         success, data = upload_file_imgur(image)
         try:
             f = open(liblookit.LOG_FILE, 'ab')
@@ -260,7 +255,6 @@ def upload_file(image, existing_file=False):
         finally:
             f.close()
     elif proto == 'CloudApp':
-        liblookit.show_notification('Lookit', 'Uploading image to CloudApp...')
         success, data = upload_file_cloud(image,
                     config.get('Upload', 'username'),
                     config.get('Upload', 'password'))
