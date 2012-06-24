@@ -1,72 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="64px"
-   height="64px"
-   id="svg2888"
-   version="1.1"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="lookit-dark.svg"
-   inkscape:export-filename="/home/zach/lookit.png"
-   inkscape:export-xdpi="30.9375"
-   inkscape:export-ydpi="30.9375">
-  <defs
-     id="defs2890">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 32 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="64 : 32 : 1"
-       inkscape:persp3d-origin="32 : 21.333333 : 1"
-       id="perspective2896" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="8.0342072"
-     inkscape:cy="38.763771"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:document-units="px"
-     inkscape:grid-bbox="true"
-     inkscape:window-width="1490"
-     inkscape:window-height="862"
-     inkscape:window-x="315"
-     inkscape:window-y="71"
-     inkscape:window-maximized="0" />
-  <metadata
-     id="metadata2893">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     id="layer1"
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer">
-    <path
-       style="fill:#43423e;stroke:#eae3d0;stroke-opacity:1;fill-opacity:1;stroke-linejoin:round;stroke-linecap:butt"
-       d="m 11.35323,8.5103411 c -2.2160001,0 -4.0000001,1.7839999 -4.0000001,3.9999999 l 0,2 c -2.216,0 -4,1.784001 -4,4.000001 l 0,30 c 0,2.216 1.784,4 4,4 l 47.9999981,0 c 2.216,0 4,-1.784 4,-4 l 0,-30 c 0,-2.216 -1.784,-4.000001 -4,-4.000001 l -27.999999,0 0,-2 c 0,-2.216 -1.784,-3.9999999 -4,-3.9999999 l -11.999999,0 z m 0,2.9999999 11.999999,0 c 0.554,0 1,0.446 1,1 0,0 0,6.291667 0,7.625001 0,0.554 -0.446,1 -1,1 0,0 -4,0 -6,0 -2,0 -5.999999,0 -5.999999,0 -0.554,0 -1,-0.446 -1,-1 0,-1.333334 0,-7.625001 0,-7.625001 0,-0.554 0.446,-1 1,-1 z m 29,10.000001 c 6.627418,0 11.999998,5.372583 11.999998,12 0,6.627417 -5.37258,12 -11.999998,12 -6.627418,0 -12.000001,-5.372583 -12.000001,-12 0,-6.627417 5.372583,-12 12.000001,-12 z"
-       id="rect2898"
-       sodipodi:nodetypes="cccccccccccccccccsczcscccsssc" />
-  </g>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="24" width="23" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <title>Lookit icon - mono light - 24px</title>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Lookit icon - mono light - 24px</dc:title>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Harenome Ranaivoarivony Razanajato</dc:title>
+     </cc:Agent>
+    </dc:creator>
+    <cc:license rdf:resource="http://www.gnu.org/licenses/gpl.html"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g fill-rule="evenodd" transform="translate(1,-1029.438)">
+  <path opacity="0.3" fill="#FFF" d="M10.5,1031.4c-5.799,0-10.5,4.7-10.5,10.5s4.701,10.5,10.5,10.5,10.5-4.7,10.5-10.5-4.701-10.5-10.5-10.5zm0,1c5.247,0,9.5,4.2,9.5,9.5,0,5.2-4.253,9.5-9.5,9.5-5.2467,0-9.5-4.3-9.5-9.5,0-5.3,4.2533-9.5,9.5-9.5zm0,1c-4.6944,0-8.5,3.8-8.5,8.5s3.8056,8.5,8.5,8.5c4.694,0,8.5-3.8,8.5-8.5s-3.806-8.5-8.5-8.5zm0,7c0.828,0,1.5,0.6,1.5,1.5,0,0.8-0.672,1.5-1.5,1.5-0.8284,0-1.5-0.7-1.5-1.5,0-0.9,0.6716-1.5,1.5-1.5z"/>
+  <path fill="#3c3c3c" d="M10.5,0c-5.799,0-10.5,4.701-10.5,10.5s4.701,10.5,10.5,10.5,10.5-4.701,10.5-10.5-4.701-10.5-10.5-10.5zm0,1c5.247,0,9.5,4.2533,9.5,9.5,0,5.247-4.253,9.5-9.5,9.5-5.2467,0-9.5-4.253-9.5-9.5,0-5.2467,4.2533-9.5,9.5-9.5zm0,1c-4.6944,0-8.5,3.8056-8.5,8.5,0,4.694,3.8056,8.5,8.5,8.5,4.694,0,8.5-3.806,8.5-8.5,0-4.6944-3.806-8.5-8.5-8.5zm0,7c0.828,0,1.5,0.6716,1.5,1.5,0,0.828-0.672,1.5-1.5,1.5-0.8284,0-1.5-0.672-1.5-1.5,0-0.8284,0.6716-1.5,1.5-1.5z" transform="translate(0,1030.3622)"/>
+ </g>
 </svg>
