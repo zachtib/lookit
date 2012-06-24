@@ -26,7 +26,7 @@ LookitButton.prototype = {
     _init: function(mode) {
         PanelMenu.Button.prototype._init.call(this, 0.0);
 
-        this._icon = new St.Icon({ icon_name: 'lookit-dark',
+        this._icon = new St.Icon({ icon_name: 'lookit-panel',
                                    icon_type: St.IconType.FULLCOLOR,
                                    icon_size: Main.panel.button.height });
 
