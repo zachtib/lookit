@@ -1,4 +1,36 @@
+import subprocess
+from os.path import join
 from distutils.core import setup
+from distutils.log import warn, info
+from distutils.command.install_data import install_data as _install_data
+
+class InstallData(_install_data):
+    """
+    Run some GNOME integration tasks or reverse those, respectively.
+    """
+
+    def run(self):
+        _install_data.run(self)
+        self._update_icon_cache()
+
+    def _update_icon_cache(self):
+        """
+        Warm icon caches since we update icon themes with new files
+        """
+
+        theme_dirs = [
+            join(self.install_dir, 'share', 'icons', 'ubuntu-mono-light'),
+            join(self.install_dir, 'share', 'icons', 'ubuntu-mono-dark'),
+            join(self.install_dir, 'share', 'icons', 'hicolor')
+        ]
+
+        for theme_dir in theme_dirs:
+            try:
+                info('updating icons cache for: %s', theme_dir)
+                subprocess.call(
+                    ['gtk-update-icon-cache', '-q', '-f', '-t', theme_dir])
+            except Exception, ex:
+                warn('updating icon cache failed: %s', ex)
 
 setup(name='lookit',
       version='1.2.0',
@@ -28,4 +60,6 @@ setup(name='lookit',
               'src/gnome-shell/extensions/lookit@extensions.zachtib.com/metadata.json',
               'src/gnome-shell/extensions/lookit@extensions.zachtib.com/stylesheet.css'])
       ],
+      cmdclass={
+          'install_data': InstallData }
      )
