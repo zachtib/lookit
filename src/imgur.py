@@ -1,6 +1,8 @@
 import pycurl
 import xml.parsers.expat
 
+import liblookit
+
 IMGUR_ALLOWED = ['JPEG', 'GIF', 'PNG', 'APNG', 'TIFF', 'BMP', 'PDF', 'XCF']
 
 class ImgurUploader:
@@ -32,6 +34,7 @@ class ImgurUploader:
         c.setopt(c.URL, 'http://imgur.com/api/upload.xml')
         c.setopt(c.HTTPPOST, values)
         c.setopt(c.WRITEFUNCTION, self.curl_response)
+        c.setopt(c.USERAGENT, 'liblookit/' + liblookit.VERSION_STR)
 
         c.perform()
         c.close()
