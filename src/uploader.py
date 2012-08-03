@@ -201,15 +201,20 @@ def upload_pixbuf(pb):
         pb.save_to_callback(ftmp.write, 'png')
         ftmp.flush()
         ftmp.close()
-        upload_file(ftmp.name)
+        return upload_file(ftmp.name)
 
 def upload_file(image, existing_file=False):
     config = lookitconfig.LookitConfig()
 
     proto = config.get('Upload', 'type')
+    # Temporary disable upload
+    if not config.getboolean('Upload', 'enableupload'):
+        proto = 'None'
 
-    if proto == 'SSH':
-        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
+    if proto == 'None':
+        success = True
+        data = False
+    elif proto == 'SSH':
         success, data = upload_file_sftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -220,10 +225,8 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'HTTP':
-	liblookit.show_notification('Lookit', 'Upload image to {0}...'.format(config.get('Upload', 'URL')))
 	success, data = upload_file_http(image, config.get('Upload', 'URL'))
     elif proto == 'FTP':
-        liblookit.show_notification('Lookit', 'Uploading image to {0}...'.format(config.get('Upload', 'hostname')))
         success, data = upload_file_ftp(image,
                     config.get('Upload', 'hostname'),
                     int(config.get('Upload', 'port')),
@@ -233,7 +236,6 @@ def upload_file(image, existing_file=False):
                     config.get('Upload', 'url'),
                     )
     elif proto == 'Omploader':
-        liblookit.show_notification('Lookit', 'Uploading image to Omploader...')
         success, data = upload_file_omploader(image)
         try:
             f = open(liblookit.LOG_FILE, 'ab')
@@ -243,7 +245,6 @@ def upload_file(image, existing_file=False):
         finally:
             f.close()
     elif proto == 'Imgur':
-        liblookit.show_notification('Lookit', 'Uploading image to Imgur...')
         success, data = upload_file_imgur(image)
         try:
             f = open(liblookit.LOG_FILE, 'ab')
@@ -254,13 +255,9 @@ def upload_file(image, existing_file=False):
         finally:
             f.close()
     elif proto == 'CloudApp':
-        liblookit.show_notification('Lookit', 'Uploading image to CloudApp...')
         success, data = upload_file_cloud(image,
                     config.get('Upload', 'username'),
                     config.get('Upload', 'password'))
-    elif proto == 'None':
-        success = True
-        data = False
     else:
         success = False
         data = "Error: no such protocol: {0}".format(proto)
@@ -305,6 +302,8 @@ def upload_file(image, existing_file=False):
             liblookit.show_notification('Lookit', 'Error: No upload type selected')
         else:
             liblookit.show_notification('Lookit', 'Image saved: ' + image)
+            return image
     else:
         liblookit.show_notification('Lookit', 'Upload complete: ' + url)
+        return url
 

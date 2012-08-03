@@ -65,17 +65,17 @@ def do_capture_area():
         show_notification('Lookit', 'Selection cancelled')
         return
     pb = screencapper.capture_selection(selection)
-    uploader.upload_pixbuf(pb)
+    return uploader.upload_pixbuf(pb)
 
 def do_capture_window():
     handle_delay()
     pb = screencapper.capture_active_window()
-    uploader.upload_pixbuf(pb)
+    return uploader.upload_pixbuf(pb)
 
 def do_capture_screen():
     handle_delay()
     pb = screencapper.capture_screen()
-    uploader.upload_pixbuf(pb)
+    return uploader.upload_pixbuf(pb)
 
 def do_preferences():
     preferences.PreferencesDialog().run()

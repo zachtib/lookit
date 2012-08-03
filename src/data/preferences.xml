@@ -581,6 +581,7 @@
                     <child>
                       <object class="GtkEntry" id="ssh_key_file">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
                         <property name="primary_icon_activatable">False</property>
