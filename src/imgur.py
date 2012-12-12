@@ -31,7 +31,7 @@ class ImgurUploader:
         # API key at: http://imgur.com/register/api/
         values = [  ('key', 'e5acb0d99a09b654a2c7e833c7f2dbe1'),
                 ('image', (c.FORM_FILE, image))]
-        c.setopt(c.URL, 'http://imgur.com/api/upload.xml')
+        c.setopt(c.URL, 'https://api.imgur.com/3/upload.xml')
         c.setopt(c.HTTPPOST, values)
         c.setopt(c.WRITEFUNCTION, self.curl_response)
         c.setopt(c.USERAGENT, 'liblookit/' + liblookit.VERSION_STR)

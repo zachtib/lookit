@@ -246,10 +246,11 @@ def upload_file(image, existing_file=False):
             f.close()
     elif proto == 'Imgur':
         success, data = upload_file_imgur(image)
+        # Backwards compatibility
+        data['original_image'] = data['link']
         try:
             f = open(liblookit.LOG_FILE, 'ab')
             f.write(time.ctime() + ' Uploaded screenshot to Imgur: ' + data['original_image'] + '\n')
-            f.write('Delete url: ' + data['delete_page'] + '\n')
         except IOError, e:
             pass
         finally:
