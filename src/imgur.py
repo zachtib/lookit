@@ -1,3 +1,4 @@
+import os
 import pycurl
 import xml.parsers.expat
 
@@ -25,12 +26,15 @@ class ImgurUploader:
         self.response = self.response + buf
 
     def upload(self, image):
-        c = pycurl.Curl()
         # Note: This key is specific for Lookit. If you want to use
-        # the Imgur API in your application, please apply for an
+        # the Imgur API in your application, please register for a new
         # API key at: http://imgur.com/register/api/
-        values = [  ('key', 'e5acb0d99a09b654a2c7e833c7f2dbe1'),
-                ('image', (c.FORM_FILE, image))]
+        client_id = 'cde2ab3f2b4972c'
+        key = os.getenv('IMGUR_CLIENT_ID', client_id)
+
+        c = pycurl.Curl()
+        values = [('image', (c.FORM_FILE, image))]
+        c.setopt(pycurl.HTTPHEADER, ['Authorization:  Client-ID ' + key])
         c.setopt(c.URL, 'https://api.imgur.com/3/upload.xml')
         c.setopt(c.HTTPPOST, values)
         c.setopt(c.WRITEFUNCTION, self.curl_response)
