@@ -15,7 +15,8 @@
 
 Contributors:
 Vadim Rutkovsky
-Henrik Nordvik</property>
+Henrik Nordvik
+Dirk Rother</property>
     <property name="logo_icon_name">lookit</property>
     <signal name="response" handler="on_about_dialog_response" swapped="no"/>
     <child internal-child="vbox">
